@@ -1,0 +1,20 @@
+.dataRow td {
+    font-size: 14px;
+}
+
+.symbol {
+    font-weight: 500;
+}
+.symbol:hover {
+    cursor: pointer !important;
+    color: #6CE606 !important;
+}
+.tradeBtn {
+    width:100px !important;
+    height: 30px !important;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
