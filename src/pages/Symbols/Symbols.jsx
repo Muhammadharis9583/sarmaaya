@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Form } from "react-bootstrap";
 import DataTable from "../../components/DataTable";
-import styles from "./Symbols.module.css";
 
 const Symbols = () => {
   const [length, setLength] = useState(10);
