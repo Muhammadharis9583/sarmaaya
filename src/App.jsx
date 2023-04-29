@@ -6,6 +6,8 @@ import "./App.css";
 import NavBar from "./components/NavBar";
 import Symbols from "./pages/Symbols/Symbols";
 
+import Footer from "./components/Footer";
+
 function App() {
   return (
     <>
@@ -15,6 +17,7 @@ function App() {
           <Route exact path="/symbols" element={<Symbols />}></Route>
         </Routes>
       </BrowserRouter>
+      <Footer/>
     </>
   );
 }
