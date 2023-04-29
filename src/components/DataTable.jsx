@@ -38,7 +38,7 @@ function DataTable(props) {
       <tbody>
         {data.map((stock, index) => {
           return (
-            <tr key={index} className={styles.dataRow}>
+            <tr key={index} className="fs-6">
               <td className={styles.symbol}>
                 <a href="https://sarmaaya.pk/psx/company/THALL">
                   <img src="mosque.png" alt="stock image" className="mb-2" width="18px" />
@@ -82,10 +82,10 @@ function DataTable(props) {
               </td>
               <td>
                 <div style={{ display: "flex", gap: "10px" }}>
-                  <Button className={styles.tradeBtn} variant="success">
+                  <Button className="btn btn-sm d-flex  m-auto" variant="success">
                     Open Trade
                   </Button>
-                  <Button className={styles.tradeBtn} variant="danger">
+                  <Button className="btn btn-sm d-flex  m-auto" variant="danger">
                     Close Trade
                   </Button>
                 </div>
