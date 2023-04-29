@@ -10,14 +10,17 @@ const Symbols = () => {
     setLength(parseInt(e.target.value));
   };
   return (
-    <div className={styles.dataTable}>
-      <div className={styles.dataTables_wrapper}>
+    <div
+      className="rounded-3 w-90 m-auto"
+      style={{ width: "90%", background: "#ffffff", marginTop: "10px" }}
+    >
+      <div>
         <div className="d-flex justify-content-between border">
-          <div className="">
-            <div className={styles.dataTables_length} id="stock-screener_length">
-              <label className={styles.label} htmlFor="">
+          <div>
+            <div className="pt-3 ps-3" id="stock-screener_length">
+              <label className="d-flex gap-2 align-items-center mb-2 text-align-left" htmlFor="">
                 Show
-                <Form.Select onChange={handleSelectChange}>
+                <Form.Select className="w-auto d-inline-block" onChange={handleSelectChange}>
                   <option value={10}>10</option>
                   <option value={25}>25</option>
                   <option value={50}>50</option>
@@ -27,9 +30,10 @@ const Symbols = () => {
               </label>
             </div>
           </div>
-          <div className="">
-            <div id="stock-screener_filter" className={styles.dataTables_filter}>
-              <label className={styles.searchLabel}>
+          {/*  */}
+          <div>
+            <div id="stock-screener_filter" className="pt-3 pe-3">
+              <label className="d-flex align-items-baseline gap-2 mb-2">
                 Search:
                 <input
                   type="search"
