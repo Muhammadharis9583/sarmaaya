@@ -21,7 +21,7 @@ function NavBar() {
           {/* -------------- nav links --------------- */}
           <Nav className="mx-auto">
             <Nav.Link href="symbols">Symbols</Nav.Link>
-            <Nav.Link href="#trades">Trades</Nav.Link>
+            <Nav.Link href="trades">Trades</Nav.Link>
             <Nav.Link href="#protfolio">Portfolio</Nav.Link>
             <Nav.Link href="#hsitory">History</Nav.Link>
           </Nav>

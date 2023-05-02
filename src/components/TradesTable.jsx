@@ -3,22 +3,17 @@ import { useEffect, useState } from "react";
 import { Button, Table, Modal, Form } from "react-bootstrap";
 import styles from "./DataTable.module.css";
 import stocks from "../../dumm_data/stocks.json";
-import '../styles/modal.css'
+import "../styles/modal.css";
 
 const heads = [
   "Symbol",
   "Points",
-  "Weight",
   "Cur.",
   "Chg.",
-  "Chg%.",
-  "52WK High",
-  "52WK Low",
   "Vol.",
-  "Market Cap(000's)",
   "Trade Option",
 ];
-function DataTable(props) {
+function TradeTable(props) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -29,14 +24,14 @@ function DataTable(props) {
   // stocks to lenth of 10
   const [data, setData] = useState(stocks.data.slice(0, 10));
   useEffect(() => {
-    setData(stocks.data.slice(0, props.length));
-  }, [props.length]);
- const handleSubmit = (event) => {
-   event.preventDefault();
-   // Do something with the form data
-   console.log({ name, type, volume });
-   handleClose();
- };
+    setData(stocks.data.slice(0, 10));
+  }, []);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Do something with the form data
+    console.log({ name, type, volume });
+    handleClose();
+  };
   return (
     <>
       <Table responsive bordered striped>
@@ -67,9 +62,6 @@ function DataTable(props) {
                 <td title={`${stock.stock_symbol} Index Points`}>
                   {Math.round(stock.indexpoints * 100) / 100}
                 </td>
-                <td title={`${stock.stock_symbol} Weightage`}>
-                  {Math.round(stock.weightage * 100) / 100}
-                </td>
                 <td title={`${stock.stock_symbol} Current Price`}>
                   {Math.round(stock.stock_current_price * 100) / 100}
                 </td>
@@ -81,34 +73,17 @@ function DataTable(props) {
                 >
                   {Math.round(stock.stock_change * 100) / 100}
                 </td>
-                <td
-                  style={{
-                    color: stock.stock_change_p > 0 ? "green" : "red",
-                  }}
-                  title={`${stock.stock_symbol} Change%`}
-                >
-                  {Math.round(stock.stock_change_p * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} 52WK High`}>
-                  {Math.round(stock.fifty_two_week_high * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} 52WK Low`}>
-                  {Math.round(stock.fifty_two_week_low * 100) / 100}
-                </td>
                 <td title={`${stock.stock_symbol} Volume`}>
                   {stock.stock_volume}
-                </td>
-                <td title={`${stock.stock_symbol} Market Cap`}>
-                  {parseFloat(stock.marketcap).toFixed(2)}
                 </td>
                 <td>
                   <div style={{ display: "flex", gap: "10px" }}>
                     <Button
                       className="btn btn-sm d-flex  m-auto"
-                      variant="success"
+                      variant="danger"
                       onClick={handleShow}
                     >
-                      Open Trade
+                      Close Trade
                     </Button>
                   </div>
                 </td>
@@ -193,4 +168,4 @@ function DataTable(props) {
     </>
   );
 }
-export default DataTable;
+export default TradeTable;
