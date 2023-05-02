@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import styles from "./DataTable.module.css";
-import stocks from "../../dumm_data/stocks.json";
 
 const heads = [
   "Symbol",
@@ -19,10 +18,10 @@ const heads = [
 ];
 function DataTable(props) {
   // stocks to lenth of 10
-  const [data, setData] = useState(stocks.data.slice(0, 10));
+  const [data, setData] = useState(props.data.slice(0, 10));
   useEffect(() => {
-    setData(stocks.data.slice(0, props.length));
-  }, [props.length]);
+    setData(props.data.slice(0, props.length));
+  }, [props.data, props.length]);
 
   return (
     <Table responsive bordered striped>
@@ -78,7 +77,9 @@ function DataTable(props) {
               </td>
               <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
               <td title={`${stock.stock_symbol} Market Cap`}>
-                {parseFloat(stock.marketcap).toFixed(2)}
+                {parseFloat(stock.marketcap).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                })}
               </td>
               <td>
                 <div style={{ display: "flex", gap: "10px" }}>
@@ -98,3 +99,9 @@ function DataTable(props) {
   );
 }
 export default DataTable;
+
+// conver 88536122737.95 to 88,536,122,737.95 in javascript code
+// parseFloat(88536122737.95).toLocaleString("en-US", {
+//   style: "currency",
+//   currency: "USD",
+// });

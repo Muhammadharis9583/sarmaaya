@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Form } from "react-bootstrap";
 import DataTable from "../../components/DataTable";
+import stocks from "../../../dummy_data/stocks.json";
 
 const Symbols = () => {
   const [length, setLength] = useState(10);
@@ -44,7 +45,7 @@ const Symbols = () => {
             </div>
           </div>
         </div>
-        <DataTable length={length} />
+        <DataTable data={stocks.data} length={length} />
       </div>
     </div>
   );
