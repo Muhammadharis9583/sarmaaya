@@ -28,8 +28,14 @@ function NavBar() {
 
           {/* -------------- dropdown -------------- */}
           <Nav className="ml-auto">
-            <p>John Doe</p>
-            <NavDropdown title={<FontAwesomeIcon icon={faUser} />} id="basic-nav-dropdown">
+            <NavDropdown
+              title={
+                <>
+                  <FontAwesomeIcon icon={faUser} /> Haris
+                </>
+              }
+              id="basic-nav-dropdown"
+            >
               <NavDropdown.Item href="#profile">Profile</NavDropdown.Item>
               <NavDropdown.Item href="#settings">Settings</NavDropdown.Item>
               <NavDropdown.Divider />
