@@ -4,27 +4,13 @@ import { Button, Table, Modal, Form } from "react-bootstrap";
 import styles from "./DataTable.module.css";
 import axios from "axios";
 
-const heads = [
-  "Symbol",
-  "Points",
-  "Weight",
-  "Cur.",
-  "Chg.",
-  "Chg%.",
-  "52WK High",
-  "52WK Low",
-  "Vol.",
-  "Market Cap(000's)",
-  "Trade Option",
-];
 function DataTable(props) {
   const [show, setShow] = useState(false);
-
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [volume, setVolume] = useState("");
   const [description, setDescription] = useState("");
-  // stocks to lenth of 10
+  const [search, setSearch] = useState("");
   const [length, setLength] = useState(10);
   const [stockData, setStockData] = useState();
   const [data, setData] = useState(props.data.slice(0, 10));
@@ -40,6 +26,18 @@ function DataTable(props) {
       setStockData();
     };
   }, []);
+
+  useEffect(() => {
+    if (search.length === 0) {
+      setData(props.data.slice(0, length));
+    } else if (search.length) {
+      const filteredData = data.filter((stock) =>
+        stock.stock_symbol.toLowerCase().includes(search.toLowerCase())
+      );
+
+      setData(filteredData);
+    }
+  }, [search]);
 
   // for updating the data table rows
   useEffect(() => {
@@ -62,7 +60,7 @@ function DataTable(props) {
         indexpoints: stockData.indexpoints,
         stock_current_price: stockData.stock_current_price,
         stock_change: stockData.stock_change,
-        marketcap: volume,
+        stock_volume: volume,
         description,
       });
       console.log(response.data);
@@ -104,6 +102,7 @@ function DataTable(props) {
                 className="form-control form-control-sm"
                 placeholder=""
                 aria-controls="stock-screener"
+                onChange={(e) => setSearch(e.target.value)}
               />
             </label>
           </div>
@@ -112,7 +111,7 @@ function DataTable(props) {
       <Table responsive bordered striped>
         <thead>
           <tr>
-            {heads.map((head, index) => (
+            {props.tableHeads.map((head, index) => (
               <th key={index} style={{ fontWeight: "600", fontSize: 16 }}>
                 {head}
               </th>
@@ -132,9 +131,11 @@ function DataTable(props) {
                 <td title={`${stock.stock_symbol} Index Points`}>
                   {Math.round(stock.indexpoints * 100) / 100}
                 </td>
-                <td title={`${stock.stock_symbol} Weightage`}>
-                  {Math.round(stock.weightage * 100) / 100}
-                </td>
+                {stock.weightage && (
+                  <td title={`${stock.stock_symbol} Weightage`}>
+                    {Math.round(stock.weightage * 100) / 100}
+                  </td>
+                )}
                 <td title={`${stock.stock_symbol} Current Price`}>
                   {Math.round(stock.stock_current_price * 100) / 100}
                 </td>
@@ -146,28 +147,37 @@ function DataTable(props) {
                 >
                   {Math.round(stock.stock_change * 100) / 100}
                 </td>
-                <td
-                  style={{
-                    color: stock.stock_change_p > 0 ? "green" : "red",
-                  }}
-                  title={`${stock.stock_symbol} Change%`}
-                >
-                  {Math.round(stock.stock_change_p * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} 52WK High`}>
-                  {Math.round(stock.fifty_two_week_high * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} 52WK Low`}>
-                  {Math.round(stock.fifty_two_week_low * 100) / 100}
-                </td>
+                {stock.fifty_two_week_low && (
+                  <>
+                    <td
+                      style={{
+                        color: stock.stock_change_p > 0 ? "green" : "red",
+                      }}
+                      title={`${stock.stock_symbol} Change%`}
+                    >
+                      {Math.round(stock.stock_change_p * 100) / 100}
+                    </td>
+
+                    <td title={`${stock.stock_symbol} 52WK High`}>
+                      {Math.round(stock.fifty_two_week_high * 100) / 100}
+                    </td>
+
+                    <td title={`${stock.stock_symbol} 52WK Low`}>
+                      {Math.round(stock.fifty_two_week_low * 100) / 100}
+                    </td>
+                  </>
+                )}
                 <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
-                <td title={`${stock.stock_symbol} Market Cap`}>
-                  {parseFloat(stock.marketcap).toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                  })}
-                </td>
+                {stock.marketcap && (
+                  <td title={`${stock.stock_symbol} Market Cap`}>
+                    {parseFloat(stock.marketcap).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}
+                  </td>
+                )}
+                <td title={`${stock.stock_symbol} Profit`}></td>
                 <td>
-                  <div style={{ display: "flex", gap: "10px" }}>
+                  <div>
                     {props.tradeType !== "open" && (
                       <Button
                         className="btn btn-sm d-flex  m-auto"
@@ -180,7 +190,7 @@ function DataTable(props) {
                     {props.tradeType === "open" && (
                       <Button
                         onClick={() => handleOpenTradeClick(stock)}
-                        className="btn btn-sm d-flex  m-auto"
+                        className="btn btn-sm d-flex"
                         variant="danger"
                       >
                         Close Trade

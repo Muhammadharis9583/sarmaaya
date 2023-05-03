@@ -23,7 +23,7 @@
       "indexpoints": "11.6621786906975163",
       "stock_current_price": "19300.0000",
       "stock_change": "1300.00",
-      "marketcap": "1010",
+      "stock_volume": "1010",
       "description": "Hello Test desc",
       "id": 1
     },
@@ -33,9 +33,19 @@
       "indexpoints": "11.1528354324767057",
       "stock_current_price": "54.4500",
       "stock_change": "2.23",
-      "marketcap": "500",
+      "stock_volume": "500",
       "description": "Current price is xyz",
       "id": 2
+    },
+    {
+      "stock_symbol": "TGL",
+      "type": "Buy",
+      "indexpoints": "-1.7591574670830122",
+      "stock_current_price": "68.7300",
+      "stock_change": "-0.95",
+      "stock_volume": "5000",
+      "description": "Buy 5000",
+      "id": 3
     }
   ]
 }
