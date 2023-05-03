@@ -2,46 +2,19 @@
 import { useEffect, useState } from "react";
 import { Button, Table, Modal, Form } from "react-bootstrap";
 import styles from "./DataTable.module.css";
-import axios from "axios";
+import "../styles/modal.css";
 
-const heads = [
-  "Symbol",
-  "Points",
-  "Weight",
-  "Cur.",
-  "Chg.",
-  "Chg%.",
-  "52WK High",
-  "52WK Low",
-  "Vol.",
-  "Market Cap(000's)",
-  "Trade Option",
-];
-function DataTable(props) {
+const heads = ["Symbol", "Points", "Cur.", "Chg.", "Vol.", "Trade Option"];
+
+function TradeTable(props) {
   const [show, setShow] = useState(false);
-
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [volume, setVolume] = useState("");
   const [description, setDescription] = useState("");
-  // stocks to lenth of 10
-  const [length, setLength] = useState(10);
-  const [stockData, setStockData] = useState();
   const [data, setData] = useState(props.data.slice(0, 10));
+  const [length, setLength] = useState(10);
 
-  useEffect(() => {
-    // cleanup function
-    return () => {
-      setName("");
-      setType("");
-      setVolume("");
-      setDescription("");
-      setLength(10);
-      setStockData();
-    };
-  }, []);
-
-  // for updating the data table rows
   useEffect(() => {
     setData(props.data.slice(0, length));
   }, [props.data, length]);
@@ -49,34 +22,13 @@ function DataTable(props) {
   const handleSelectChange = (e) => {
     setLength(parseInt(e.target.value));
   };
-  const handleOpenSubmit = async (event) => {
+
+  const handleSubmit = (event) => {
     event.preventDefault();
     // Do something with the form data
-    console.log({ name: stockData.stock_symbol, type, volume, description });
-
-    // write to a .json file
-    try {
-      const response = await axios.post("http://localhost:3001/trades", {
-        stock_symbol: stockData.stock_symbol,
-        type,
-        indexpoints: stockData.indexpoints,
-        stock_current_price: stockData.stock_current_price,
-        stock_change: stockData.stock_change,
-        marketcap: volume,
-        description,
-      });
-      console.log(response.data);
-      setShow(false);
-    } catch (error) {
-      console.error(error);
-    }
+    console.log({ name, type, volume });
+    setShow(false);
   };
-
-  const handleOpenTradeClick = (stock) => {
-    setStockData(stock);
-    setShow(true);
-  };
-
   return (
     <>
       <div className="d-flex justify-content-between border">
@@ -132,9 +84,6 @@ function DataTable(props) {
                 <td title={`${stock.stock_symbol} Index Points`}>
                   {Math.round(stock.indexpoints * 100) / 100}
                 </td>
-                <td title={`${stock.stock_symbol} Weightage`}>
-                  {Math.round(stock.weightage * 100) / 100}
-                </td>
                 <td title={`${stock.stock_symbol} Current Price`}>
                   {Math.round(stock.stock_current_price * 100) / 100}
                 </td>
@@ -146,46 +95,21 @@ function DataTable(props) {
                 >
                   {Math.round(stock.stock_change * 100) / 100}
                 </td>
-                <td
-                  style={{
-                    color: stock.stock_change_p > 0 ? "green" : "red",
-                  }}
-                  title={`${stock.stock_symbol} Change%`}
-                >
-                  {Math.round(stock.stock_change_p * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} 52WK High`}>
-                  {Math.round(stock.fifty_two_week_high * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} 52WK Low`}>
-                  {Math.round(stock.fifty_two_week_low * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
-                <td title={`${stock.stock_symbol} Market Cap`}>
+                <td title={`${stock.stock_symbol} Volume`}>
+                  {stock.stock_volume}
                   {parseFloat(stock.marketcap).toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                   })}
                 </td>
                 <td>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    {props.tradeType !== "open" && (
-                      <Button
-                        className="btn btn-sm d-flex  m-auto"
-                        variant="success"
-                        onClick={() => handleOpenTradeClick(stock)}
-                      >
-                        Open Trade
-                      </Button>
-                    )}
-                    {props.tradeType === "open" && (
-                      <Button
-                        onClick={() => handleOpenTradeClick(stock)}
-                        className="btn btn-sm d-flex  m-auto"
-                        variant="danger"
-                      >
-                        Close Trade
-                      </Button>
-                    )}
+                  <div style={{}}>
+                    <Button
+                      className="btn btn-sm d-flex"
+                      variant="danger"
+                      onClick={() => setShow(false)}
+                    >
+                      Close Trade
+                    </Button>
                   </div>
                 </td>
               </tr>
@@ -199,19 +123,19 @@ function DataTable(props) {
           <Modal.Title>Open Trade</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="d-flex justify-content-center">
               <div className="d-inline-flex w-75 justify-content-between">
                 <div>
                   <Form.Label>Symbol Name</Form.Label>
                   <h5 className="text-center" style={{ color: "#69df07" }}>
-                    {stockData?.stock_symbol}
+                    YOUW
                   </h5>
                 </div>
                 <div>
                   <Form.Label>Current Points</Form.Label>
                   <h5 className="text-center" style={{ color: "red" }}>
-                    {Math.round(stockData?.indexpoints * 100) / 100}
+                    -0.15
                   </h5>
                 </div>
               </div>
@@ -261,7 +185,7 @@ function DataTable(props) {
           <Button variant="secondary" onClick={() => setShow(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleOpenSubmit}>
+          <Button variant="primary" onClick={handleSubmit}>
             Submit
           </Button>
         </Modal.Footer>
@@ -269,4 +193,4 @@ function DataTable(props) {
     </>
   );
 }
-export default DataTable;
+export default TradeTable;

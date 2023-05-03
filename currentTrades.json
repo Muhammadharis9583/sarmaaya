@@ -1,0 +1,41 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "trades": [
+    {
+      "stock_symbol": "UPFL",
+      "type": "Buy",
+      "indexpoints": "11.6621786906975163",
+      "stock_current_price": "19300.0000",
+      "stock_change": "1300.00",
+      "marketcap": "1010",
+      "description": "Hello Test desc",
+      "id": 1
+    },
+    {
+      "stock_symbol": "SEARL",
+      "type": "Sell",
+      "indexpoints": "11.1528354324767057",
+      "stock_current_price": "54.4500",
+      "stock_change": "2.23",
+      "marketcap": "500",
+      "description": "Current price is xyz",
+      "id": 2
+    }
+  ]
+}
