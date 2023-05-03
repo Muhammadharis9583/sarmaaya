@@ -13,7 +13,7 @@ function DataTable(props) {
   const [search, setSearch] = useState("");
   const [length, setLength] = useState(10);
   const [stockData, setStockData] = useState();
-  const [data, setData] = useState(props.data.slice(0, 10));
+  const [data, setData] = useState(props.data.slice(0, length));
 
   useEffect(() => {
     // cleanup function
@@ -27,6 +27,7 @@ function DataTable(props) {
     };
   }, []);
 
+  // for searching the data table rows and updating rows based on search terms
   useEffect(() => {
     if (search.length === 0) {
       setData(props.data.slice(0, length));
@@ -47,14 +48,18 @@ function DataTable(props) {
   const handleSelectChange = (e) => {
     setLength(parseInt(e.target.value));
   };
-  const handleOpenSubmit = async (event) => {
+  const handleOpenTradeSubmit = async (event) => {
     event.preventDefault();
-    // Do something with the form data
-    console.log({ name: stockData.stock_symbol, type, volume, description });
+    console.log({
+      name: stockData.stock_title,
+      symbol: stockData.stock_symbol,
+      type,
+      volume,
+      description,
+    });
 
-    // write to a .json file
     try {
-      const response = await axios.post("http://localhost:3001/trades", {
+      const response = await axios.post("http://localhost:3001/openTrades", {
         stock_symbol: stockData.stock_symbol,
         type,
         indexpoints: stockData.indexpoints,
@@ -62,6 +67,8 @@ function DataTable(props) {
         stock_change: stockData.stock_change,
         stock_volume: volume,
         description,
+        name: stockData.stock_title,
+        date: new Date().toLocaleDateString(),
       });
       console.log(response.data);
       setShow(false);
@@ -70,7 +77,64 @@ function DataTable(props) {
     }
   };
 
+  const handleCloseTradeSubmit = async (event) => {
+    event.preventDefault();
+
+    // invalid stock volume validation. parseInt is used because volume is a json string
+    if (volume > parseInt(stockData.stock_volume)) {
+      alert("Volume cannot be greater than stock volume");
+      return;
+    }
+    // write to a .json file
+    try {
+      const response = await axios.post("http://localhost:3001/closedTrades", {
+        stock_symbol: stockData.stock_symbol,
+        type,
+        indexpoints: stockData.indexpoints,
+        stock_current_price: stockData.stock_current_price,
+        stock_change: stockData.stock_change,
+        stock_volume: volume,
+        description,
+        profit: 120,
+        name: stockData.stock_title,
+        date: new Date().toLocaleDateString(),
+      });
+      console.log(response.data);
+
+      // if stock volume is 0, delete the trade from open trades
+      if (stockData.stock_volume - volume === 0) {
+        await axios.delete(`http://localhost:3001/openTrades/${stockData.id}`);
+
+        // delete the stock from the data table
+        setData((prevData) => prevData.filter((stock) => stock.id !== stockData.id));
+      } else {
+        // else update the stock volume in open trades
+        const updatedData = await axios.patch(`http://localhost:3001/openTrades/${stockData.id}`, {
+          stock_volume: parseInt(stockData.stock_volume) - volume,
+        });
+        console.log(updatedData.data);
+
+        // update the stock volume in the data table
+        setData((prevData) => {
+          const newData = prevData.map((stock) => {
+            if (stock.id === updatedData.id) {
+              // create a new object with updated stock volume and return it
+              return { ...stock, stock_volume: parseInt(stock.stock_volume) - volume };
+            }
+            // else return the stock as it is
+            return stock;
+          });
+          // return the new data
+          return newData;
+        });
+      }
+      setShow(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleOpenTradeClick = (stock) => {
+    // set the stock data to the stock row that was clicked
     setStockData(stock);
     setShow(true);
   };
@@ -123,7 +187,7 @@ function DataTable(props) {
             return (
               <tr key={index} className="fs-6">
                 <td className={styles.symbol}>
-                  <a href="https://sarmaaya.pk/psx/company/THALL">
+                  <a href={`https://sarmaaya.pk/psx/company/${stock.stock_symbol}`}>
                     <img src="mosque.png" alt="stock image" className="mb-2" width="18px" />
                   </a>{" "}
                   {stock.stock_symbol}
@@ -168,6 +232,8 @@ function DataTable(props) {
                   </>
                 )}
                 <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
+
+                {/* market cap */}
                 {stock.marketcap && (
                   <td title={`${stock.stock_symbol} Market Cap`}>
                     {parseFloat(stock.marketcap).toLocaleString("en-US", {
@@ -175,7 +241,16 @@ function DataTable(props) {
                     })}
                   </td>
                 )}
-                <td title={`${stock.stock_symbol} Profit`}></td>
+                {props.tradeType == "open" && (
+                  <td
+                    style={{
+                      color: stock.stock_change > 0 ? "green" : "red",
+                    }}
+                    title={`${stock.stock_symbol} Profit`}
+                  >
+                    50
+                  </td>
+                )}
                 <td>
                   <div>
                     {props.tradeType !== "open" && (
@@ -190,7 +265,7 @@ function DataTable(props) {
                     {props.tradeType === "open" && (
                       <Button
                         onClick={() => handleOpenTradeClick(stock)}
-                        className="btn btn-sm d-flex"
+                        className="btn btn-sm d-flex m-auto"
                         variant="danger"
                       >
                         Close Trade
@@ -224,6 +299,14 @@ function DataTable(props) {
                     {Math.round(stockData?.indexpoints * 100) / 100}
                   </h5>
                 </div>
+                {props.tradeType === "open" && (
+                  <div>
+                    <Form.Label>Current Profit</Form.Label>
+                    <h5 className="text-center" style={{ color: "red" }}>
+                      {Math.round(stockData?.indexpoints * 100) / 100}
+                    </h5>
+                  </div>
+                )}
               </div>
 
               {/* <Form.Control
@@ -237,6 +320,7 @@ function DataTable(props) {
             <Form.Group>
               <Form.Label>Type:</Form.Label>
               <Form.Control
+                required
                 as="select"
                 value={type}
                 onChange={(event) => setType(event.target.value)}
@@ -271,7 +355,10 @@ function DataTable(props) {
           <Button variant="secondary" onClick={() => setShow(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleOpenSubmit}>
+          <Button
+            variant="primary"
+            onClick={props.tradeType !== "open" ? handleOpenTradeSubmit : handleCloseTradeSubmit}
+          >
             Submit
           </Button>
         </Modal.Footer>

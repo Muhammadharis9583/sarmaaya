@@ -1,4 +1,3 @@
-import { useState } from "react";
 import DataTable from "../../components/DataTable";
 import stocks from "../../../dummy_data/stocks.json";
 

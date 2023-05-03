@@ -1,50 +1,77 @@
 {
-  "posts": [
+  "openTrades": [
     {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
-  "profile": {
-    "name": "typicode"
-  },
-  "trades": [
-    {
-      "stock_symbol": "UPFL",
+      "stock_symbol": "SEARL",
       "type": "Buy",
-      "indexpoints": "11.6621786906975163",
-      "stock_current_price": "19300.0000",
-      "stock_change": "1300.00",
-      "stock_volume": "1010",
-      "description": "Hello Test desc",
+      "indexpoints": "11.1528354324767057",
+      "stock_current_price": "54.4500",
+      "stock_change": "2.23",
+      "stock_volume": 950,
+      "description": "First Buy",
+      "name": "The Searle Company Limited",
+      "date": "5/3/2023",
       "id": 1
     },
+    {
+      "stock_symbol": "HUBC",
+      "type": "Buy",
+      "indexpoints": "3.4389173448828941",
+      "stock_current_price": "71.8600",
+      "stock_change": "0.13",
+      "stock_volume": "1000",
+      "description": "Second Buy",
+      "name": "The Hub Power Company Limited",
+      "date": "5/3/2023",
+      "id": 2
+    },
+    {
+      "stock_symbol": "AIRLINK",
+      "type": "Buy",
+      "indexpoints": "-0.6666692489915714",
+      "stock_current_price": "18.9900",
+      "stock_change": "-0.25",
+      "stock_volume": 400,
+      "description": "Third Buy",
+      "name": "Air Link Communication Limited",
+      "date": "5/3/2023",
+      "id": 3
+    }
+  ],
+  "closedTrades": [
     {
       "stock_symbol": "SEARL",
       "type": "Sell",
       "indexpoints": "11.1528354324767057",
       "stock_current_price": "54.4500",
       "stock_change": "2.23",
-      "stock_volume": "500",
-      "description": "Current price is xyz",
+      "stock_volume": "50",
+      "description": "First Sell",
+      "profit": 120,
+      "date": "5/3/2023",
+      "id": 1
+    },
+    {
+      "stock_symbol": "AIRLINK",
+      "type": "Sell",
+      "indexpoints": "-0.6666692489915714",
+      "stock_current_price": "18.9900",
+      "stock_change": "-0.25",
+      "stock_volume": "600",
+      "description": "Second Sell",
+      "profit": 120,
+      "date": "5/3/2023",
       "id": 2
     },
     {
-      "stock_symbol": "TGL",
-      "type": "Buy",
-      "indexpoints": "-1.7591574670830122",
-      "stock_current_price": "68.7300",
-      "stock_change": "-0.95",
-      "stock_volume": "5000",
-      "description": "Buy 5000",
+      "stock_symbol": "YOUW",
+      "type": "",
+      "indexpoints": "-0.1539221196016505",
+      "stock_current_price": "3.3200",
+      "stock_change": "-0.13",
+      "stock_volume": "10",
+      "description": "Sold out!",
+      "profit": 120,
+      "date": "5/3/2023",
       "id": 3
     }
   ]

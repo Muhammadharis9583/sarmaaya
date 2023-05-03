@@ -1,24 +1,42 @@
+import { useEffect, useState } from "react";
 import currentTrades from "../../../currentTrades.json";
 import DataTable from "../../components/DataTable";
+import axios from "axios";
 
 const CurrentTrades = () => {
-  const tableHeads = ["Symbol", "Points", "Cur.", "Chg.", "Vol.", "Profit", "Trade Option"];
+  const [data, setData] = useState([]);
+  const tableHeads = [
+    "Symbol",
+    "Points",
+    "Current Price",
+    "Change",
+    "Volume",
+    "Profit",
+    "Trade Option",
+  ];
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const response = await axios.get("http://localhost:3001/openTrades");
+        setData(response.data);
+      };
+
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+
+    return () => {
+      setData([]);
+    };
+  }, []);
   return (
     <div
-      className="rounded-3 w-90 mx-auto"
-      style={{ width: "90%", background: "#ffffff", marginTop: "10px" }}
+      className="rounded-3  mx-auto"
+      style={{ width: "80%", background: "#ffffff", marginTop: "10px" }}
     >
-      {/* <TradeTable
-        data={currentTrades.trades}
-        length={currentTrades.trades.length}
-        tradeType="open"
-      /> */}
-      <DataTable
-        tableHeads={tableHeads}
-        data={currentTrades.trades}
-        length={currentTrades.trades.length}
-        tradeType="open"
-      />
+      <DataTable tableHeads={tableHeads} data={data} tradeType="open" />
     </div>
   );
 };
