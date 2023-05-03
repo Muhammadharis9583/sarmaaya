@@ -4,30 +4,16 @@ import { Button, Table, Modal, Form } from "react-bootstrap";
 import styles from "./DataTable.module.css";
 import axios from "axios";
 
-const heads = [
-  "Symbol",
-  "Points",
-  "Weight",
-  "Cur.",
-  "Chg.",
-  "Chg%.",
-  "52WK High",
-  "52WK Low",
-  "Vol.",
-  "Market Cap(000's)",
-  "Trade Option",
-];
 function DataTable(props) {
   const [show, setShow] = useState(false);
-
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [volume, setVolume] = useState("");
   const [description, setDescription] = useState("");
-  // stocks to lenth of 10
+  const [search, setSearch] = useState("");
   const [length, setLength] = useState(10);
   const [stockData, setStockData] = useState();
-  const [data, setData] = useState(props.data.slice(0, 10));
+  const [data, setData] = useState(props.data.slice(0, length));
 
   useEffect(() => {
     // cleanup function
@@ -41,6 +27,19 @@ function DataTable(props) {
     };
   }, []);
 
+  // for searching the data table rows and updating rows based on search terms
+  useEffect(() => {
+    if (search.length === 0) {
+      setData(props.data.slice(0, length));
+    } else if (search.length) {
+      const filteredData = data.filter((stock) =>
+        stock.stock_symbol.toLowerCase().includes(search.toLowerCase())
+      );
+
+      setData(filteredData);
+    }
+  }, [search]);
+
   // for updating the data table rows
   useEffect(() => {
     setData(props.data.slice(0, length));
@@ -49,21 +48,27 @@ function DataTable(props) {
   const handleSelectChange = (e) => {
     setLength(parseInt(e.target.value));
   };
-  const handleOpenSubmit = async (event) => {
+  const handleOpenTradeSubmit = async (event) => {
     event.preventDefault();
-    // Do something with the form data
-    console.log({ name: stockData.stock_symbol, type, volume, description });
+    console.log({
+      name: stockData.stock_title,
+      symbol: stockData.stock_symbol,
+      type,
+      volume,
+      description,
+    });
 
-    // write to a .json file
     try {
-      const response = await axios.post("http://localhost:3001/trades", {
+      const response = await axios.post("http://localhost:3001/openTrades", {
         stock_symbol: stockData.stock_symbol,
         type,
         indexpoints: stockData.indexpoints,
         stock_current_price: stockData.stock_current_price,
         stock_change: stockData.stock_change,
-        marketcap: volume,
+        stock_volume: volume,
         description,
+        name: stockData.stock_title,
+        date: new Date().toLocaleDateString(),
       });
       console.log(response.data);
       setShow(false);
@@ -72,7 +77,64 @@ function DataTable(props) {
     }
   };
 
+  const handleCloseTradeSubmit = async (event) => {
+    event.preventDefault();
+
+    // invalid stock volume validation. parseInt is used because volume is a json string
+    if (volume > parseInt(stockData.stock_volume)) {
+      alert("Volume cannot be greater than stock volume");
+      return;
+    }
+    // write to a .json file
+    try {
+      const response = await axios.post("http://localhost:3001/closedTrades", {
+        stock_symbol: stockData.stock_symbol,
+        type,
+        indexpoints: stockData.indexpoints,
+        stock_current_price: stockData.stock_current_price,
+        stock_change: stockData.stock_change,
+        stock_volume: volume,
+        description,
+        profit: 120,
+        name: stockData.stock_title,
+        date: new Date().toLocaleDateString(),
+      });
+      console.log(response.data);
+
+      // if stock volume is 0, delete the trade from open trades
+      if (stockData.stock_volume - volume === 0) {
+        await axios.delete(`http://localhost:3001/openTrades/${stockData.id}`);
+
+        // delete the stock from the data table
+        setData((prevData) => prevData.filter((stock) => stock.id !== stockData.id));
+      } else {
+        // else update the stock volume in open trades
+        const updatedData = await axios.patch(`http://localhost:3001/openTrades/${stockData.id}`, {
+          stock_volume: parseInt(stockData.stock_volume) - volume,
+        });
+        console.log(updatedData.data);
+
+        // update the stock volume in the data table
+        setData((prevData) => {
+          const newData = prevData.map((stock) => {
+            if (stock.id === updatedData.id) {
+              // create a new object with updated stock volume and return it
+              return { ...stock, stock_volume: parseInt(stock.stock_volume) - volume };
+            }
+            // else return the stock as it is
+            return stock;
+          });
+          // return the new data
+          return newData;
+        });
+      }
+      setShow(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleOpenTradeClick = (stock) => {
+    // set the stock data to the stock row that was clicked
     setStockData(stock);
     setShow(true);
   };
@@ -104,6 +166,7 @@ function DataTable(props) {
                 className="form-control form-control-sm"
                 placeholder=""
                 aria-controls="stock-screener"
+                onChange={(e) => setSearch(e.target.value)}
               />
             </label>
           </div>
@@ -112,7 +175,7 @@ function DataTable(props) {
       <Table responsive bordered striped>
         <thead>
           <tr>
-            {heads.map((head, index) => (
+            {props.tableHeads.map((head, index) => (
               <th key={index} style={{ fontWeight: "600", fontSize: 16 }}>
                 {head}
               </th>
@@ -124,7 +187,7 @@ function DataTable(props) {
             return (
               <tr key={index} className="fs-6">
                 <td className={styles.symbol}>
-                  <a href="https://sarmaaya.pk/psx/company/THALL">
+                  <a href={`https://sarmaaya.pk/psx/company/${stock.stock_symbol}`}>
                     <img src="mosque.png" alt="stock image" className="mb-2" width="18px" />
                   </a>{" "}
                   {stock.stock_symbol}
@@ -132,9 +195,11 @@ function DataTable(props) {
                 <td title={`${stock.stock_symbol} Index Points`}>
                   {Math.round(stock.indexpoints * 100) / 100}
                 </td>
-                <td title={`${stock.stock_symbol} Weightage`}>
-                  {Math.round(stock.weightage * 100) / 100}
-                </td>
+                {stock.weightage && (
+                  <td title={`${stock.stock_symbol} Weightage`}>
+                    {Math.round(stock.weightage * 100) / 100}
+                  </td>
+                )}
                 <td title={`${stock.stock_symbol} Current Price`}>
                   {Math.round(stock.stock_current_price * 100) / 100}
                 </td>
@@ -146,28 +211,48 @@ function DataTable(props) {
                 >
                   {Math.round(stock.stock_change * 100) / 100}
                 </td>
-                <td
-                  style={{
-                    color: stock.stock_change_p > 0 ? "green" : "red",
-                  }}
-                  title={`${stock.stock_symbol} Change%`}
-                >
-                  {Math.round(stock.stock_change_p * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} 52WK High`}>
-                  {Math.round(stock.fifty_two_week_high * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} 52WK Low`}>
-                  {Math.round(stock.fifty_two_week_low * 100) / 100}
-                </td>
+                {stock.fifty_two_week_low && (
+                  <>
+                    <td
+                      style={{
+                        color: stock.stock_change_p > 0 ? "green" : "red",
+                      }}
+                      title={`${stock.stock_symbol} Change%`}
+                    >
+                      {Math.round(stock.stock_change_p * 100) / 100}
+                    </td>
+
+                    <td title={`${stock.stock_symbol} 52WK High`}>
+                      {Math.round(stock.fifty_two_week_high * 100) / 100}
+                    </td>
+
+                    <td title={`${stock.stock_symbol} 52WK Low`}>
+                      {Math.round(stock.fifty_two_week_low * 100) / 100}
+                    </td>
+                  </>
+                )}
                 <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
-                <td title={`${stock.stock_symbol} Market Cap`}>
-                  {parseFloat(stock.marketcap).toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                  })}
-                </td>
+
+                {/* market cap */}
+                {stock.marketcap && (
+                  <td title={`${stock.stock_symbol} Market Cap`}>
+                    {parseFloat(stock.marketcap).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}
+                  </td>
+                )}
+                {props.tradeType == "open" && (
+                  <td
+                    style={{
+                      color: stock.stock_change > 0 ? "green" : "red",
+                    }}
+                    title={`${stock.stock_symbol} Profit`}
+                  >
+                    50
+                  </td>
+                )}
                 <td>
-                  <div style={{ display: "flex", gap: "10px" }}>
+                  <div>
                     {props.tradeType !== "open" && (
                       <Button
                         className="btn btn-sm d-flex  m-auto"
@@ -180,7 +265,7 @@ function DataTable(props) {
                     {props.tradeType === "open" && (
                       <Button
                         onClick={() => handleOpenTradeClick(stock)}
-                        className="btn btn-sm d-flex  m-auto"
+                        className="btn btn-sm d-flex m-auto"
                         variant="danger"
                       >
                         Close Trade
@@ -214,6 +299,14 @@ function DataTable(props) {
                     {Math.round(stockData?.indexpoints * 100) / 100}
                   </h5>
                 </div>
+                {props.tradeType === "open" && (
+                  <div>
+                    <Form.Label>Current Profit</Form.Label>
+                    <h5 className="text-center" style={{ color: "red" }}>
+                      {Math.round(stockData?.indexpoints * 100) / 100}
+                    </h5>
+                  </div>
+                )}
               </div>
 
               {/* <Form.Control
@@ -227,6 +320,7 @@ function DataTable(props) {
             <Form.Group>
               <Form.Label>Type:</Form.Label>
               <Form.Control
+                required
                 as="select"
                 value={type}
                 onChange={(event) => setType(event.target.value)}
@@ -261,7 +355,10 @@ function DataTable(props) {
           <Button variant="secondary" onClick={() => setShow(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleOpenSubmit}>
+          <Button
+            variant="primary"
+            onClick={props.tradeType !== "open" ? handleOpenTradeSubmit : handleCloseTradeSubmit}
+          >
             Submit
           </Button>
         </Modal.Footer>
