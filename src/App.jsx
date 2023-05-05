@@ -8,6 +8,8 @@ import Symbols from "./pages/Symbols/Symbols";
 
 import Footer from "./components/Footer";
 import CurrentTrades from "./pages/Trades/CurrentTrades";
+import Protfolio from "./pages/Protfolio/Protfolio";
+import History from "./pages/History/History";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Routes>
           <Route exact path="/symbols" element={<Symbols />}></Route>
           <Route exact path="/trades" element={<CurrentTrades />}></Route>
+          <Route exact path="/portfolio" element={<Protfolio />}></Route>
+          <Route exact path="/history" element={<History />}></Route>
         </Routes>
       </BrowserRouter>
       <Footer />

@@ -3,6 +3,7 @@ import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
+import '../styles/NavBar.css'
 
 function NavBar() {
   return (
@@ -21,16 +22,42 @@ function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           {/* -------------- nav links --------------- */}
           <Nav className="mx-auto d-flex">
-            <NavLink to="/symbols">Symbols</NavLink>
-            <NavLink to="/trades">Trades</NavLink>
-            <NavLink to="#portfolio">Portfolio</NavLink>
-            <NavLink to="#history">History</NavLink>
+            <NavLink
+              to="/symbols"
+              className="nav-link"
+              activeClassName="active"
+            >
+              Symbols
+            </NavLink>
+            <NavLink to="/trades" className="nav-link" activeClassName="active">
+              Trades
+            </NavLink>
+            <NavLink
+              to="/portfolio"
+              className="nav-link"
+              activeClassName="active"
+            >
+              Portfolio
+            </NavLink>
+            <NavLink
+              to="/history"
+              className="nav-link"
+              activeClassName="active"
+            >
+              History
+            </NavLink>
           </Nav>
 
           {/* -------------- dropdown -------------- */}
           <Nav className="ml-auto">
-            <p>John Doe</p>
-            <NavDropdown title={<FontAwesomeIcon icon={faUser} />} id="basic-nav-dropdown">
+            <NavDropdown
+              title={
+                <>
+                  <FontAwesomeIcon icon={faUser} /> Haris
+                </>
+              }
+              id="basic-nav-dropdown"
+            >
               <NavDropdown.Item href="#profile">Profile</NavDropdown.Item>
               <NavDropdown.Item href="#settings">Settings</NavDropdown.Item>
               <NavDropdown.Divider />

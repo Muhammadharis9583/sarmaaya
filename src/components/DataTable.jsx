@@ -187,8 +187,15 @@ function DataTable(props) {
             return (
               <tr key={index} className="fs-6">
                 <td className={styles.symbol}>
-                  <a href={`https://sarmaaya.pk/psx/company/${stock.stock_symbol}`}>
-                    <img src="mosque.png" alt="stock image" className="mb-2" width="18px" />
+                  <a
+                    href={`https://sarmaaya.pk/psx/company/${stock.stock_symbol}`}
+                  >
+                    <img
+                      src="mosque.png"
+                      alt="stock image"
+                      className="mb-2"
+                      width="18px"
+                    />
                   </a>{" "}
                   {stock.stock_symbol}
                 </td>
@@ -231,7 +238,9 @@ function DataTable(props) {
                     </td>
                   </>
                 )}
-                <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
+                <td title={`${stock.stock_symbol} Volume`}>
+                  {stock.stock_volume}
+                </td>
 
                 {/* market cap */}
                 {stock.marketcap && (
@@ -249,6 +258,16 @@ function DataTable(props) {
                     title={`${stock.stock_symbol} Profit`}
                   >
                     50
+                  </td>
+                )}
+                {props.tradeType == "open" && (
+                  <td
+                    style={{
+                      color: stock.type == "Buy" ? "green" : "red",
+                    }}
+                    title={`${stock.stock_symbol} Type`}
+                  >
+                    {stock.type}
                   </td>
                 )}
                 <td>

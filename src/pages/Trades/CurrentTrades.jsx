@@ -12,6 +12,7 @@ const CurrentTrades = () => {
     "Change",
     "Volume",
     "Profit",
+    "Type",
     "Trade Option",
   ];
 

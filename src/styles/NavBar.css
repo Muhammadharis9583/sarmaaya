@@ -1,0 +1,15 @@
+.nav-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  border: none;
+  border-radius: 0;
+  color: #000;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  background-color: #6ce606;
+  color: #fff;
+}
