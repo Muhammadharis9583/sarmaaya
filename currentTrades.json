@@ -18,7 +18,7 @@
       "indexpoints": "3.4389173448828941",
       "stock_current_price": "71.8600",
       "stock_change": "0.13",
-      "stock_volume": "1000",
+      "stock_volume": 500,
       "description": "Second Buy",
       "name": "The Hub Power Company Limited",
       "date": "5/3/2023",
@@ -47,68 +47,36 @@
       "name": "The Hub Power Company Limited",
       "date": "5/4/2023",
       "id": 4
-    },
-    {
-      "stock_symbol": "TRG",
-      "type": "Sell",
-      "indexpoints": "-7.5420924487288892",
-      "stock_current_price": "109.5300",
-      "stock_change": "-0.73",
-      "stock_volume": "50",
-      "description": "For test",
-      "name": "TRG Pakistan Limited",
-      "date": "5/4/2023",
-      "id": 5
-    },
-    {
-      "stock_symbol": "THALL",
-      "type": "Sell",
-      "indexpoints": "7.8389466023407366",
-      "stock_current_price": "177.0000",
-      "stock_change": "6.80",
-      "stock_volume": "185",
-      "description": "It's the right time",
-      "name": "Thal Limited",
-      "date": "5/4/2023",
-      "id": 6
     }
   ],
   "closedTrades": [
     {
-      "stock_symbol": "SEARL",
-      "type": "Sell",
-      "indexpoints": "11.1528354324767057",
-      "stock_current_price": "54.4500",
-      "stock_change": "2.23",
-      "stock_volume": "50",
-      "description": "First Sell",
+      "id": 7,
+      "stock_symbol": "THALL",
+      "st_time": "5/6/2023, 4:00:19 PM",
+      "start_currnet_price": "177.0000",
+      "type": "Buy",
+      "indexpoints": "7.8389466023407366",
+      "stock_current_price": "177.0000",
+      "stock_change": "6.80",
+      "stock_volume": "500",
+      "description": "test",
       "profit": 120,
-      "date": "5/3/2023",
-      "id": 1
+      "date": "5/6/2023, 4:04:13 PM"
     },
     {
-      "stock_symbol": "AIRLINK",
+      "id": 8.819397273683599,
+      "stock_symbol": "BOP",
+      "st_time": "5/6/2023, 4:08:19 PM",
+      "start_currnet_price": "3.8700",
       "type": "Sell",
-      "indexpoints": "-0.6666692489915714",
-      "stock_current_price": "18.9900",
-      "stock_change": "-0.25",
-      "stock_volume": "600",
-      "description": "Second Sell",
+      "indexpoints": "-6.2163896188393413",
+      "stock_current_price": "3.8700",
+      "stock_change": "-0.19",
+      "stock_volume": "450",
+      "description": "test",
       "profit": 120,
-      "date": "5/3/2023",
-      "id": 2
-    },
-    {
-      "stock_symbol": "YOUW",
-      "type": "",
-      "indexpoints": "-0.1539221196016505",
-      "stock_current_price": "3.3200",
-      "stock_change": "-0.13",
-      "stock_volume": "10",
-      "description": "Sold out!",
-      "profit": 120,
-      "date": "5/3/2023",
-      "id": 3
+      "date": "5/6/2023, 4:08:56 PM"
     }
   ]
 }

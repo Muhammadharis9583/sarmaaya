@@ -13,7 +13,7 @@ function DataTable(props) {
   const [search, setSearch] = useState("");
   const [length, setLength] = useState(10);
   const [stockData, setStockData] = useState();
-  const [data, setData] = useState(props.data.slice(0, length));
+  const [data, setData] = useState(props.openData.slice(0, length));
 
   useEffect(() => {
     // cleanup function
@@ -30,7 +30,7 @@ function DataTable(props) {
   // for searching the data table rows and updating rows based on search terms
   useEffect(() => {
     if (search.length === 0) {
-      setData(props.data.slice(0, length));
+      setData(props.openData.slice(0, length));
     } else if (search.length) {
       const filteredData = data.filter((stock) =>
         stock.stock_symbol.toLowerCase().includes(search.toLowerCase())
@@ -42,8 +42,8 @@ function DataTable(props) {
 
   // for updating the data table rows
   useEffect(() => {
-    setData(props.data.slice(0, length));
-  }, [props.data, length]);
+    setData(props.openData.slice(0, length));
+  }, [props.openData, length]);
 
   const handleSelectChange = (e) => {
     setLength(parseInt(e.target.value));
@@ -56,10 +56,12 @@ function DataTable(props) {
       type,
       volume,
       description,
+
     });
 
     try {
       const response = await axios.post("http://localhost:3001/openTrades", {
+        id: Math.random()*10,
         stock_symbol: stockData.stock_symbol,
         type,
         indexpoints: stockData.indexpoints,
@@ -68,7 +70,7 @@ function DataTable(props) {
         stock_volume: volume,
         description,
         name: stockData.stock_title,
-        date: new Date().toLocaleDateString(),
+        date: new Date().toLocaleString(),
       });
       console.log(response.data);
       setShow(false);
@@ -88,8 +90,11 @@ function DataTable(props) {
     // write to a .json file
     try {
       const response = await axios.post("http://localhost:3001/closedTrades", {
+        id: stockData.id,
         stock_symbol: stockData.stock_symbol,
-        type,
+        st_time: stockData.date,
+        start_currnet_price: stockData.stock_current_price,
+        type: stockData.type,
         indexpoints: stockData.indexpoints,
         stock_current_price: stockData.stock_current_price,
         stock_change: stockData.stock_change,
@@ -97,7 +102,7 @@ function DataTable(props) {
         description,
         profit: 120,
         name: stockData.stock_title,
-        date: new Date().toLocaleDateString(),
+        date: new Date().toLocaleString(),
       });
       console.log(response.data);
 
@@ -268,6 +273,13 @@ function DataTable(props) {
                     title={`${stock.stock_symbol} Type`}
                   >
                     {stock.type}
+                  </td>
+                )}
+                {props.tradeType == "open" && (
+                  <td
+                    title={`${stock.stock_symbol} Time`}
+                  >
+                    {stock.date}
                   </td>
                 )}
                 <td>

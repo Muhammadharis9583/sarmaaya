@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import currentTrades from "../../../currentTrades.json";
 import DataTable from "../../components/DataTable";
 import axios from "axios";
 
 const CurrentTrades = () => {
-  const [data, setData] = useState([]);
+  const [open, setOpenData] = useState([]);
   const tableHeads = [
     "Symbol",
     "Points",
@@ -13,6 +12,7 @@ const CurrentTrades = () => {
     "Volume",
     "Profit",
     "Type",
+    "Time",
     "Trade Option",
   ];
 
@@ -20,7 +20,7 @@ const CurrentTrades = () => {
     try {
       const fetchData = async () => {
         const response = await axios.get("http://localhost:3001/openTrades");
-        setData(response.data);
+        setOpenData(response.data);
       };
 
       fetchData();
@@ -29,15 +29,15 @@ const CurrentTrades = () => {
     }
 
     return () => {
-      setData([]);
+      setOpenData([]);
     };
   }, []);
   return (
     <div
-      className="rounded-3  mx-auto"
+      className="rounded-3  mx-auto min-vh-100"
       style={{ width: "80%", background: "#ffffff", marginTop: "10px" }}
     >
-      <DataTable tableHeads={tableHeads} data={data} tradeType="open" />
+      <DataTable tableHeads={tableHeads} openData={open} tradeType="open" />
     </div>
   );
 };

@@ -17,11 +17,16 @@ const Symbols = () => {
   ];
   return (
     <div
-      className="rounded-3 w-90 mx-auto"
+      className="rounded-3 w-90 mx-auto min-vh-100"
       style={{ width: "90%", background: "#ffffff", marginTop: "10px" }}
     >
       <div>
-        <DataTable tableHeads={tableHeads} data={stocks.data} length={length} tradeType="" />
+        <DataTable
+          tableHeads={tableHeads}
+          openData={stocks.data}
+          length={length}
+          tradeType=""
+        />
       </div>
     </div>
   );
