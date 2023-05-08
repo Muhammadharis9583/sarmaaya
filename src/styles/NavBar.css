@@ -13,3 +13,7 @@
   background-color: #6ce606;
   color: #fff;
 }
+.nav-link.active {
+  background-color: #6ce606;
+  color: #fff;
+}

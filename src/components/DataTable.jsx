@@ -38,7 +38,7 @@ function DataTable(props) {
 
       setData(filteredData);
     }
-  }, [search]);
+  }, [search, length]);
 
   // for updating the data table rows
   useEffect(() => {
@@ -56,12 +56,11 @@ function DataTable(props) {
       type,
       volume,
       description,
-
     });
 
     try {
       const response = await axios.post("http://localhost:3001/openTrades", {
-        id: Math.random()*10,
+        id: Math.random() * 10,
         stock_symbol: stockData.stock_symbol,
         type,
         indexpoints: stockData.indexpoints,
@@ -192,15 +191,8 @@ function DataTable(props) {
             return (
               <tr key={index} className="fs-6">
                 <td className={styles.symbol}>
-                  <a
-                    href={`https://sarmaaya.pk/psx/company/${stock.stock_symbol}`}
-                  >
-                    <img
-                      src="mosque.png"
-                      alt="stock image"
-                      className="mb-2"
-                      width="18px"
-                    />
+                  <a href={`https://sarmaaya.pk/psx/company/${stock.stock_symbol}`}>
+                    <img src="mosque.png" alt="stock image" className="mb-2" width="18px" />
                   </a>{" "}
                   {stock.stock_symbol}
                 </td>
@@ -243,9 +235,7 @@ function DataTable(props) {
                     </td>
                   </>
                 )}
-                <td title={`${stock.stock_symbol} Volume`}>
-                  {stock.stock_volume}
-                </td>
+                <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
 
                 {/* market cap */}
                 {stock.marketcap && (
@@ -276,11 +266,7 @@ function DataTable(props) {
                   </td>
                 )}
                 {props.tradeType == "open" && (
-                  <td
-                    title={`${stock.stock_symbol} Time`}
-                  >
-                    {stock.date}
-                  </td>
+                  <td title={`${stock.stock_symbol} Time`}>{stock.date}</td>
                 )}
                 <td>
                   <div>

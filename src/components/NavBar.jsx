@@ -3,7 +3,7 @@ import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
-import '../styles/NavBar.css'
+import "../styles/NavBar.css";
 
 function NavBar() {
   return (
@@ -22,28 +22,16 @@ function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           {/* -------------- nav links --------------- */}
           <Nav className="mx-auto d-flex">
-            <NavLink
-              to="/symbols"
-              className="nav-link"
-              activeClassName="active"
-            >
+            <NavLink to="/symbols" className="nav-link" activeclassname="active">
               Symbols
             </NavLink>
-            <NavLink to="/trades" className="nav-link" activeClassName="active">
+            <NavLink to="/trades" className="nav-link" activeclassname="active">
               Trades
             </NavLink>
-            <NavLink
-              to="/portfolio"
-              className="nav-link"
-              activeClassName="active"
-            >
+            <NavLink to="/portfolio" className="nav-link" activeclassname="active">
               Portfolio
             </NavLink>
-            <NavLink
-              to="/history"
-              className="nav-link"
-              activeClassName="active"
-            >
+            <NavLink to="/history" className="nav-link" activeclassname="active">
               History
             </NavLink>
           </Nav>
