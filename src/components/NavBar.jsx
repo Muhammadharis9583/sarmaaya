@@ -6,6 +6,11 @@ import { NavLink } from "react-router-dom";
 import "../styles/NavBar.css";
 
 function NavBar() {
+  const logout = (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem("user");
+    window.location.href = "/login";
+  };
   return (
     <Navbar expand="lg">
       <Container>
@@ -49,7 +54,7 @@ function NavBar() {
               <NavDropdown.Item href="#profile">Profile</NavDropdown.Item>
               <NavDropdown.Item href="#settings">Settings</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#logout">Logout</NavDropdown.Item>
+              <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

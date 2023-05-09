@@ -18,18 +18,34 @@ import Login from "./pages/Auth/Login";
 import Page404 from "./components/utils/Page404";
 
 function App() {
+  const user = JSON.parse(sessionStorage.getItem("user"));
+  let routes;
+
+  if (user) {
+    routes = (
+      <>
+        <Route exact path="/symbols" element={<Symbols />}></Route>
+        <Route exact path="/trades" element={<CurrentTrades />}></Route>
+        <Route exact path="/portfolio" element={<Protfolio />}></Route>
+        <Route exact path="/history" element={<History />}></Route>
+        <Route path="/login" element={<Navigate to="/symbols" />}></Route>
+
+        <Route path="*" element={<Page404 />}></Route>
+      </>
+    );
+  } else {
+    routes = (
+      <>
+        <Route exact path="/login" element={<Login />}></Route>
+        <Route path="*" element={<Navigate to="/login" />}></Route>
+      </>
+    );
+  }
   return (
     <>
       <BrowserRouter>
         <NavBar />
-        <Routes>
-          <Route exact path="/login" element={<Login />}></Route>
-          <Route exact path="/symbols" element={<Symbols />}></Route>
-          <Route exact path="/trades" element={<CurrentTrades />}></Route>
-          <Route exact path="/portfolio" element={<Protfolio />}></Route>
-          <Route exact path="/history" element={<History />}></Route>
-          <Route path="*" element={<Page404 />}></Route>
-        </Routes>
+        <Routes>{routes}</Routes>
       </BrowserRouter>
       <Footer />
     </>
