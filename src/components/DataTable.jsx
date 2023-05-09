@@ -15,6 +15,7 @@ function DataTable(props) {
   const [stockData, setStockData] = useState();
   const [data, setData] = useState(props.openData.slice(0, length));
 
+  // ---------------------- UI FUNCTIONS ---------------------------
   useEffect(() => {
     // cleanup function
     return () => {
@@ -48,6 +49,14 @@ function DataTable(props) {
   const handleSelectChange = (e) => {
     setLength(parseInt(e.target.value));
   };
+
+  const handleOpenTradeClick = (stock) => {
+    // set the stock data to the stock row that was clicked
+    setStockData(stock);
+    setShow(true);
+  };
+
+  // ---------------------------- API FUNCTIONS -----------------------------
   const handleOpenTradeSubmit = async (event) => {
     event.preventDefault();
     console.log({
@@ -121,7 +130,7 @@ function DataTable(props) {
         // update the stock volume in the data table
         setData((prevData) => {
           const newData = prevData.map((stock) => {
-            if (stock.id === updatedData.id) {
+            if (stock.id === stockData.id) {
               // create a new object with updated stock volume and return it
               return { ...stock, stock_volume: parseInt(stock.stock_volume) - volume };
             }
@@ -136,11 +145,6 @@ function DataTable(props) {
     } catch (error) {
       console.error(error);
     }
-  };
-  const handleOpenTradeClick = (stock) => {
-    // set the stock data to the stock row that was clicked
-    setStockData(stock);
-    setShow(true);
   };
 
   return (
@@ -334,19 +338,21 @@ function DataTable(props) {
               /> */}
             </Form.Group>
 
-            <Form.Group>
-              <Form.Label>Type:</Form.Label>
-              <Form.Control
-                required
-                as="select"
-                value={type}
-                onChange={(event) => setType(event.target.value)}
-              >
-                <option value="">Select type</option>
-                <option value="Buy">Buy</option>
-                <option value="Sell">Sell</option>
-              </Form.Control>
-            </Form.Group>
+            {props.tradeType !== "open" && (
+              <Form.Group>
+                <Form.Label>Type:</Form.Label>
+                <Form.Control
+                  required
+                  as="select"
+                  value={type}
+                  onChange={(event) => setType(event.target.value)}
+                >
+                  <option value="">Select type</option>
+                  <option value="Buy">Buy</option>
+                  <option value="Sell">Sell</option>
+                </Form.Control>
+              </Form.Group>
+            )}
 
             <Form.Group>
               <Form.Label>Volume:</Form.Label>

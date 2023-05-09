@@ -41,7 +41,7 @@ const Login = () => {
             />
           </div>
           <div className="back-btn text-center mb-3">
-            <a href="https://sarmaaya.pk/" className="badge bg-secondary">
+            <a href="https://sarmaaya.pk/" className="badge bg-secondary ">
               Back to Portal
             </a>
           </div>
