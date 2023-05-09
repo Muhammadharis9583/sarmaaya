@@ -46,8 +46,8 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>{routes}</Routes>
+        <Footer />
       </BrowserRouter>
-      <Footer />
     </>
   );
 }
