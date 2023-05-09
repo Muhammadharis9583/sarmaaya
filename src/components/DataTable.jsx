@@ -98,7 +98,7 @@ function DataTable(props) {
     // write to a .json file
     try {
       const response = await axios.post("http://localhost:3001/closedTrades", {
-        id: stockData.id,
+        stockId: stockData.id,
         stock_symbol: stockData.stock_symbol,
         st_time: stockData.date,
         start_currnet_price: stockData.stock_current_price,

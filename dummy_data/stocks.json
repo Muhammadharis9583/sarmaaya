@@ -2122,7 +2122,7 @@
       "indexpoints": "11.1528354324767057",
       "stock_current_price": "54.4500",
       "stock_change": "2.23",
-      "stock_volume": 900,
+      "stock_volume": 700,
       "description": "First Buy",
       "name": "The Searle Company Limited",
       "date": "5/3/2023",
@@ -2169,49 +2169,7 @@
   ],
   "closedTrades": [
     {
-      "id": 7,
-      "stock_symbol": "THALL",
-      "st_time": "5/6/2023, 4:00:19 PM",
-      "start_currnet_price": "177.0000",
-      "type": "Buy",
-      "indexpoints": "7.8389466023407366",
-      "stock_current_price": "177.0000",
-      "stock_change": "6.80",
-      "stock_volume": "500",
-      "description": "test",
-      "profit": 120,
-      "date": "5/6/2023, 4:04:13 PM"
-    },
-    {
-      "id": 8,
-      "stock_symbol": "BOP",
-      "st_time": "5/6/2023, 4:08:19 PM",
-      "start_currnet_price": "3.8700",
-      "type": "Sell",
-      "indexpoints": "-6.2163896188393413",
-      "stock_current_price": "3.8700",
-      "stock_change": "-0.19",
-      "stock_volume": "450",
-      "description": "test",
-      "profit": 120,
-      "date": "5/6/2023, 4:08:56 PM"
-    },
-    {
-      "id": 4,
-      "stock_symbol": "HUBC",
-      "st_time": "5/9/2023",
-      "start_currnet_price": "71.8600",
-      "type": "Buy",
-      "indexpoints": "3.4389173448828941",
-      "stock_current_price": "71.8600",
-      "stock_change": "0.13",
-      "stock_volume": "5",
-      "description": "5 trades",
-      "profit": 120,
-      "date": "5/9/2023, 12:01:00 PM"
-    },
-    {
-      "id": 1,
+      "stockId": 1,
       "stock_symbol": "SEARL",
       "st_time": "5/3/2023",
       "start_currnet_price": "54.4500",
@@ -2219,10 +2177,26 @@
       "indexpoints": "11.1528354324767057",
       "stock_current_price": "54.4500",
       "stock_change": "2.23",
-      "stock_volume": "40",
-      "description": "asfasd",
+      "stock_volume": "100",
+      "description": "Closing SEARL",
       "profit": 120,
-      "date": "5/9/2023, 12:02:54 PM"
+      "date": "5/9/2023, 12:21:20 PM",
+      "id": 1
+    },
+    {
+      "stockId": 1,
+      "stock_symbol": "SEARL",
+      "st_time": "5/3/2023",
+      "start_currnet_price": "54.4500",
+      "type": "Buy",
+      "indexpoints": "11.1528354324767057",
+      "stock_current_price": "54.4500",
+      "stock_change": "2.23",
+      "stock_volume": "100",
+      "description": "Finalizing bugs",
+      "profit": 120,
+      "date": "5/9/2023, 12:21:56 PM",
+      "id": 2
     }
   ]
 }
