@@ -68,18 +68,21 @@ function DataTable(props) {
     });
 
     try {
-      const response = await axios.post("http://localhost:3001/openTrades", {
-        id: Math.random() * 10,
-        stock_symbol: stockData.stock_symbol,
-        type,
-        indexpoints: stockData.indexpoints,
-        stock_current_price: stockData.stock_current_price,
-        stock_change: stockData.stock_change,
-        stock_volume: volume,
-        description,
-        name: stockData.stock_title,
-        date: new Date().toLocaleString(),
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/openTrades`,
+        {
+          id: Math.random() * 10,
+          stock_symbol: stockData.stock_symbol,
+          type,
+          indexpoints: stockData.indexpoints,
+          stock_current_price: stockData.stock_current_price,
+          stock_change: stockData.stock_change,
+          stock_volume: volume,
+          description,
+          name: stockData.stock_title,
+          date: new Date().toLocaleString(),
+        }
+      );
       console.log(response.data);
       setShow(false);
     } catch (error) {
@@ -97,34 +100,42 @@ function DataTable(props) {
     }
     // write to a .json file
     try {
-      const response = await axios.post("http://localhost:3001/closedTrades", {
-        stockId: stockData.id,
-        stock_symbol: stockData.stock_symbol,
-        st_time: stockData.date,
-        start_currnet_price: stockData.stock_current_price,
-        type: stockData.type,
-        indexpoints: stockData.indexpoints,
-        stock_current_price: stockData.stock_current_price,
-        stock_change: stockData.stock_change,
-        stock_volume: volume,
-        description,
-        profit: 120,
-        name: stockData.stock_title,
-        date: new Date().toLocaleString(),
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/closedTrades`,
+        {
+          stockId: stockData.id,
+          stock_symbol: stockData.stock_symbol,
+          st_time: stockData.date,
+          start_currnet_price: stockData.stock_current_price,
+          type: stockData.type,
+          indexpoints: stockData.indexpoints,
+          stock_current_price: stockData.stock_current_price,
+          stock_change: stockData.stock_change,
+          stock_volume: volume,
+          description,
+          profit: 120,
+          name: stockData.stock_title,
+          date: new Date().toLocaleString(),
+        }
+      );
       console.log(response.data);
 
       // if stock volume is 0, delete the trade from open trades
       if (stockData.stock_volume - volume === 0) {
-        await axios.delete(`http://localhost:3001/openTrades/${stockData.id}`);
+        await axios.delete(
+          `${import.meta.env.VITE_BACKEND_URL}/openTrades/${stockData.id}`
+        );
 
         // delete the stock from the data table
         setData((prevData) => prevData.filter((stock) => stock.id !== stockData.id));
       } else {
         // else update the stock volume in open trades
-        const updatedData = await axios.patch(`http://localhost:3001/openTrades/${stockData.id}`, {
-          stock_volume: parseInt(stockData.stock_volume) - volume,
-        });
+        const updatedData = await axios.patch(
+          `${import.meta.env.VITE_BACKEND_URL}/openTrades/${stockData.id}`,
+          {
+            stock_volume: parseInt(stockData.stock_volume) - volume,
+          }
+        );
         console.log(updatedData.data);
 
         // update the stock volume in the data table

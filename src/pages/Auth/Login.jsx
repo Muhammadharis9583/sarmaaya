@@ -11,7 +11,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get("http://localhost:3001/users/?id=" + accessId);
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/users/?id=` + accessId
+      );
 
       const data = await res.data;
       // check if user exists

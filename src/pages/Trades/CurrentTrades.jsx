@@ -19,7 +19,9 @@ const CurrentTrades = () => {
   useEffect(() => {
     try {
       const fetchData = async () => {
-        const response = await axios.get("http://localhost:3001/openTrades");
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/openTrades`
+        );
         setOpenData(response.data);
       };
 

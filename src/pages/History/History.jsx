@@ -19,7 +19,9 @@ function History() {
      useEffect(() => {
        try {
          const fetchData = async () => {
-           const response_close = await axios.get("http://localhost:3001/closedTrades");
+           const response_close = await axios.get(
+             `${import.meta.env.VITE_BACKEND_URL}/closedTrades`
+           );
            setCloseData(response_close.data);
          };
 

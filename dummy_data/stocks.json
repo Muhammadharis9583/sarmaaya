@@ -2125,7 +2125,7 @@
       "stock_volume": 700,
       "description": "First Buy",
       "name": "The Searle Company Limited",
-      "date": "5/3/2023",
+      "date": "5/9/2023, 12:33:17 PM",
       "id": 1
     },
     {
@@ -2137,7 +2137,7 @@
       "stock_volume": 500,
       "description": "Second Buy",
       "name": "The Hub Power Company Limited",
-      "date": "5/3/2023",
+      "date": "5/9/2023, 12:33:17 PM",
       "id": 2
     },
     {
@@ -2149,7 +2149,7 @@
       "stock_volume": 400,
       "description": "Third Buy",
       "name": "Air Link Communication Limited",
-      "date": "5/3/2023",
+      "date": "5/9/2023, 12:33:17 PM",
       "id": 3
     },
     {
@@ -2164,14 +2164,14 @@
       "stock_volume": 10,
       "description": "testing bug",
       "profit": 120,
-      "date": "5/9/2023"
+      "date": "5/9/2023, 12:33:17 PM"
     }
   ],
   "closedTrades": [
     {
       "stockId": 1,
       "stock_symbol": "SEARL",
-      "st_time": "5/3/2023",
+      "st_time": "5/3/2023, 12:33:17 PM",
       "start_currnet_price": "54.4500",
       "type": "Buy",
       "indexpoints": "11.1528354324767057",
@@ -2186,7 +2186,7 @@
     {
       "stockId": 1,
       "stock_symbol": "SEARL",
-      "st_time": "5/3/2023",
+      "st_time": "5/3/2023, 12:33:17 PM",
       "start_currnet_price": "54.4500",
       "type": "Buy",
       "indexpoints": "11.1528354324767057",
@@ -2197,6 +2197,21 @@
       "profit": 120,
       "date": "5/9/2023, 12:21:56 PM",
       "id": 2
+    },
+    {
+      "stockId": 9.990158460545775,
+      "stock_symbol": "TRG",
+      "st_time": "5/9/2023, 12:32:09 PM",
+      "start_currnet_price": "109.5300",
+      "type": "Sell",
+      "indexpoints": "-7.5420924487288892",
+      "stock_current_price": "109.5300",
+      "stock_change": "-0.73",
+      "stock_volume": "250",
+      "description": "paisay khatam ho gy ",
+      "profit": 120,
+      "date": "5/9/2023, 12:33:17 PM",
+      "id": 3
     }
   ]
 }

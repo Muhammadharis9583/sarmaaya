@@ -21,7 +21,9 @@ const Symbols = () => {
   useEffect(() => {
     try {
       const fetchData = async () => {
-        const response = await axios.get("http://localhost:3001/stockData");
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/stockData`
+        );
         setStocks(response.data.data);
       };
 
