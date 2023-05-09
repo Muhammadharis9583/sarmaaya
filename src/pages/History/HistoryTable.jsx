@@ -8,6 +8,7 @@ function HistoryTable(props) {
   const [search, setSearch] = useState("");
   const [length, setLength] = useState(10);
   const [close, setCloseData] = useState(props.closeData.slice(0, length));
+  const [expandId,setExpandId] = useState(0)
   const [isExpanded, setIsExpanded] = useState(false);
 
   // for searching the data table rows and updating rows based on search terms
@@ -30,6 +31,11 @@ function HistoryTable(props) {
   const handleSelectChange = (e) => {
     setLength(parseInt(e.target.value));
   };
+  const toggleExpansion =(index)=>{
+    console.log(index)
+    setIsExpanded(true)
+    setExpandId(index)
+  }
   
 
   return (
@@ -84,40 +90,63 @@ function HistoryTable(props) {
         <tbody>
           {close.map((stock, index) => {
             return (
-              <tr key={index} className="fs-6" onClick={toggleExpansion}>
-                <td className={styles.stock_symbol}>{stock.id}</td>
-                <td title={`${stock.stock_symbol} Start Time`}>
-                  {stock.st_time}
-                </td>
-                <td
-                  style={{
-                    color: stock.type == "Buy" ? "green" : "red",
-                  }}
-                  title={`${stock.stock_symbol} Type`}
+              <>
+                <tr
+                  key={index}
+                  className="fs-6"
+                  onClick={() => toggleExpansion(index)}
                 >
-                  {stock.type}
-                </td>
-                <td className={styles.stock_symbol}>{stock.stock_symbol}</td>
-                <td title={`${stock.stock_symbol} Start Price`}>
-                  {Math.round(stock.start_currnet_price * 100) / 100}
-                </td>
-                <td title={`${stock.stock_symbol} Volume`}>
-                  {stock.stock_volume}
-                </td>
-                <td title={`${stock.stock_symbol} End Time`}>{stock.date}</td>
-                <td title={`${stock.stock_symbol} End Price`}>
-                  {Math.round(stock.stock_current_price * 100) / 100}
-                </td>
-                {/* market cap */}
-                <td
-                  style={{
-                    color: stock.stock_change > 0 ? "green" : "red",
-                  }}
-                  title={`${stock.stock_symbol} Profit`}
-                >
-                  50
-                </td>
-              </tr>
+                  <td className={styles.stock_symbol}>{stock.id}</td>
+                  <td title={`${stock.stock_symbol} Start Time`}>
+                    {stock.st_time}
+                  </td>
+                  <td
+                    style={{
+                      color: stock.type == "Buy" ? "green" : "red",
+                    }}
+                    title={`${stock.stock_symbol} Type`}
+                  >
+                    {stock.type}
+                  </td>
+                  <td className={styles.stock_symbol}>{stock.stock_symbol}</td>
+                  <td title={`${stock.stock_symbol} Start Price`}>
+                    {Math.round(stock.start_currnet_price * 100) / 100}
+                  </td>
+                  <td title={`${stock.stock_symbol} Volume`}>
+                    {stock.stock_volume}
+                  </td>
+                  <td title={`${stock.stock_symbol} End Time`}>{stock.date}</td>
+                  <td title={`${stock.stock_symbol} End Price`}>
+                    {Math.round(stock.stock_current_price * 100) / 100}
+                  </td>
+                  {/* market cap */}
+                  <td
+                    style={{
+                      color: stock.stock_change > 0 ? "green" : "red",
+                    }}
+                    title={`${stock.stock_symbol} Profit`}
+                  >
+                    50
+                  </td>
+                </tr>
+                {isExpanded && expandId == index ? (
+                  <tr className="table-row">
+                    {/* <p class="bg-dark rounded-pill text-center p-2">
+                        Description
+                      </p> */}
+                    <td colSpan="9">
+                      <span className="d-inline-flex align-items-center">
+                        <p class="bg-secondary rounded-2 text-center p-1 text-white">
+                          Description
+                        </p>{" "}
+                        <p className="m-2">{stock.description}</p>
+                      </span>
+                    </td>
+                  </tr>
+                ) : (
+                  ""
+                )}
+              </>
             );
           })}
         </tbody>

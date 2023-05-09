@@ -5,3 +5,21 @@
     cursor: pointer !important;
     color: #6CE606 !important;
 }
+.table-row {
+            font-size: medium;
+			transform: translateY(-10px);
+			opacity: 0;
+			animation: table-row-animation 0.5s ease-in-out forwards;
+		}
+
+/* Keyframes for the animation */
+@keyframes table-row-animation {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
