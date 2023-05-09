@@ -21,9 +21,12 @@ const Symbols = () => {
   useEffect(() => {
     try {
       const fetchData = async () => {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/stockData`
-        );
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/stockData`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
         setStocks(response.data.data);
       };
 

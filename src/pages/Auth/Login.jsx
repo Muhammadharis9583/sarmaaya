@@ -11,9 +11,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/users/?id=` + accessId
-      );
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/?id=` + accessId, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
 
       const data = await res.data;
       // check if user exists

@@ -81,6 +81,12 @@ function DataTable(props) {
           description,
           name: stockData.stock_title,
           date: new Date().toLocaleString(),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
         }
       );
       console.log(response.data);
@@ -116,15 +122,24 @@ function DataTable(props) {
           profit: 120,
           name: stockData.stock_title,
           date: new Date().toLocaleString(),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
         }
       );
       console.log(response.data);
 
       // if stock volume is 0, delete the trade from open trades
       if (stockData.stock_volume - volume === 0) {
-        await axios.delete(
-          `${import.meta.env.VITE_BACKEND_URL}/openTrades/${stockData.id}`
-        );
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/openTrades/${stockData.id},`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
 
         // delete the stock from the data table
         setData((prevData) => prevData.filter((stock) => stock.id !== stockData.id));
@@ -134,6 +149,12 @@ function DataTable(props) {
           `${import.meta.env.VITE_BACKEND_URL}/openTrades/${stockData.id}`,
           {
             stock_volume: parseInt(stockData.stock_volume) - volume,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
           }
         );
         console.log(updatedData.data);
