@@ -1,6 +1,10 @@
 .symbol {
     font-weight: 500;
 }
+.symbol a {
+    text-decoration: none;
+
+}
 .symbol:hover {
     cursor: pointer !important;
     color: #6CE606 !important;

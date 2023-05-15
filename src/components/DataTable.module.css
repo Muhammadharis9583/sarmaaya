@@ -1,7 +1,30 @@
 .symbol {
     font-weight: 500;
 }
-.symbol:hover {
+.symbol a {
+    margin-left: 5px;
+    text-decoration: none;
+    color: #333;
+}
+.symbol a:hover {
     cursor: pointer !important;
     color: #6CE606 !important;
+}
+.table-row {
+            font-size: medium;
+			transform: translateY(-10px);
+			opacity: 0;
+			animation: table-row-animation 0.5s ease-in-out forwards;
+		}
+
+/* Keyframes for the animation */
+@keyframes table-row-animation {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }

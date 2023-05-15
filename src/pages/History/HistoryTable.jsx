@@ -4,11 +4,10 @@ import { Button, Table, Modal, Form } from "react-bootstrap";
 import styles from "../../components/DataTable.css";
 
 function HistoryTable(props) {
-
   const [search, setSearch] = useState("");
   const [length, setLength] = useState(10);
   const [close, setCloseData] = useState(props.closeData.slice(0, length));
-  const [expandId,setExpandId] = useState(0)
+  const [expandId, setExpandId] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
 
   // for searching the data table rows and updating rows based on search terms
@@ -31,27 +30,20 @@ function HistoryTable(props) {
   const handleSelectChange = (e) => {
     setLength(parseInt(e.target.value));
   };
-  const toggleExpansion =(index)=>{
-    console.log(index)
-    setIsExpanded(true)
-    setExpandId(index)
-  }
-  
+  const toggleExpansion = (index) => {
+    console.log(index);
+    setIsExpanded(true);
+    setExpandId(index);
+  };
 
   return (
     <>
       <div className="d-flex justify-content-between border">
         <div>
           <div className="pt-3 ps-3" id="stock-screener_length">
-            <label
-              className="d-flex gap-2 align-items-center mb-2 text-align-left"
-              htmlFor=""
-            >
+            <label className="d-flex gap-2 align-items-center mb-2 text-align-left" htmlFor="">
               Show
-              <Form.Select
-                className="w-auto d-inline-block"
-                onChange={handleSelectChange}
-              >
+              <Form.Select className="w-auto d-inline-block" onChange={handleSelectChange}>
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
@@ -91,15 +83,9 @@ function HistoryTable(props) {
           {close.map((stock, index) => {
             return (
               <>
-                <tr
-                  key={index}
-                  className="fs-6"
-                  onClick={() => toggleExpansion(index)}
-                >
+                <tr key={index} className="fs-6" onClick={() => toggleExpansion(index)}>
                   <td className={styles.stock_symbol}>{stock.id}</td>
-                  <td title={`${stock.stock_symbol} Start Time`}>
-                    {stock.st_time}
-                  </td>
+                  <td title={`${stock.stock_symbol} Start Time`}>{stock.st_time}</td>
                   <td
                     style={{
                       color: stock.type == "Buy" ? "green" : "red",
@@ -112,9 +98,7 @@ function HistoryTable(props) {
                   <td title={`${stock.stock_symbol} Start Price`}>
                     {Math.round(stock.start_currnet_price * 100) / 100}
                   </td>
-                  <td title={`${stock.stock_symbol} Volume`}>
-                    {stock.stock_volume}
-                  </td>
+                  <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
                   <td title={`${stock.stock_symbol} End Time`}>{stock.date}</td>
                   <td title={`${stock.stock_symbol} End Price`}>
                     {Math.round(stock.stock_current_price * 100) / 100}
@@ -136,7 +120,7 @@ function HistoryTable(props) {
                       </p> */}
                     <td colSpan="9">
                       <span className="d-inline-flex align-items-center">
-                        <p class="bg-secondary rounded-2 text-center p-1 text-white">
+                        <p className="bg-secondary rounded-2 text-center p-1 text-white">
                           Description
                         </p>{" "}
                         <p className="m-2">{stock.description}</p>
@@ -151,7 +135,6 @@ function HistoryTable(props) {
           })}
         </tbody>
       </Table>
-      
     </>
   );
 }

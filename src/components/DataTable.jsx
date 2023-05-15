@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Table, Modal, Form } from "react-bootstrap";
 import styles from "./DataTable.module.css";
 import axios from "axios";
+import * as qs from "qs";
 
 function DataTable(props) {
   const [show, setShow] = useState(false);
@@ -34,7 +35,7 @@ function DataTable(props) {
       setData(props.openData.slice(0, length));
     } else if (search.length) {
       const filteredData = data.filter((stock) =>
-        stock.stock_symbol.toLowerCase().includes(search.toLowerCase())
+        stock.symbol.toLowerCase().includes(search.toLowerCase())
       );
 
       setData(filteredData);
@@ -58,33 +59,39 @@ function DataTable(props) {
 
   // ---------------------------- API FUNCTIONS -----------------------------
   const handleOpenTradeSubmit = async (event) => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
     event.preventDefault();
     console.log({
+      user_id: user.id,
+      account_id: user.accessId,
       name: stockData.stock_title,
-      symbol: stockData.stock_symbol,
-      type,
-      volume,
-      description,
+      trade_symbol: stockData.symbol,
+      trade_type: type,
+      trade_comment: description,
+      trade_volume: volume,
+      trade_price: stockData.symbol_price,
+      trade_commission: 0.0,
     });
 
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/openTrades`,
         {
-          id: Math.random() * 10,
-          stock_symbol: stockData.stock_symbol,
-          type,
-          indexpoints: stockData.indexpoints,
-          stock_current_price: stockData.stock_current_price,
-          stock_change: stockData.stock_change,
-          stock_volume: volume,
-          description,
+          // id: Math.random() * 10,
+          user_id: user.id,
+          account_id: user.accessId,
           name: stockData.stock_title,
-          date: new Date().toLocaleString(),
+          trade_symbol: stockData.symbol,
+          trade_type: type,
+          trade_comment: description,
+          trade_volume: volume,
+          trade_price: stockData.symbol_price,
+          trade_commission: 0.0,
+          // date: new Date().toLocaleString(),
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
             "Access-Control-Allow-Origin": "*",
           },
         }
@@ -110,7 +117,7 @@ function DataTable(props) {
         `${import.meta.env.VITE_BACKEND_URL}/closedTrades`,
         {
           stockId: stockData.id,
-          stock_symbol: stockData.stock_symbol,
+          symbol: stockData.symbol,
           st_time: stockData.date,
           start_currnet_price: stockData.stock_current_price,
           type: stockData.type,
@@ -191,6 +198,10 @@ function DataTable(props) {
                 <option value={25}>25</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
+                <option value={200}>200</option>
+                <option value={300}>300</option>
+                <option value={400}>400</option>
+                <option value={500}>500</option>
               </Form.Select>
               stocks
             </label>
@@ -227,82 +238,38 @@ function DataTable(props) {
             return (
               <tr key={index} className="fs-6">
                 <td className={styles.symbol}>
-                  <a href={`https://sarmaaya.pk/psx/company/${stock.stock_symbol}`}>
-                    <img src="mosque.png" alt="stock image" className="mb-2" width="18px" />
-                  </a>{" "}
-                  {stock.stock_symbol}
+                  <img src="mosque.png" alt="stock image" className="mb-2" width="18px" />
+                  <a href={`https://sarmaaya.pk/psx/company/${stock.symbol}`}>{stock.symbol}</a>
                 </td>
-                <td title={`${stock.stock_symbol} Index Points`}>
-                  {Math.round(stock.indexpoints * 100) / 100}
+                <td title={`${stock.symbol} Sector`} style={{ width: "200px" }}>
+                  {stock.symbol_sector || "N/A"}
                 </td>
                 {stock.weightage && (
-                  <td title={`${stock.stock_symbol} Weightage`}>
+                  <td title={`${stock.symbol} Weightage`}>
                     {Math.round(stock.weightage * 100) / 100}
                   </td>
                 )}
-                <td title={`${stock.stock_symbol} Current Price`}>
-                  {Math.round(stock.stock_current_price * 100) / 100}
+                <td title={`${stock.symbol} Title`} style={{ width: "300px" }}>
+                  {stock.symbol_title || "N/A"}
                 </td>
-                <td
-                  style={{
-                    color: stock.stock_change > 0 ? "green" : "red",
-                  }}
-                  title={`${stock.stock_symbol} Change`}
-                >
-                  {Math.round(stock.stock_change * 100) / 100}
+                <td title={`${stock.symbol} Type`}>{stock.symbol_type || "N/A"}</td>
+
+                <td title={`${stock.symbol} Price`}>{stock.symbol_price || "N/A"}</td>
+                <td title={`${stock.symbol} LDCP`}>{stock.symbol_ldcp || "N/A"}</td>
+                <td title={`${stock.symbol} Dfault Deduction`}>
+                  {stock.default_deduction || "N/A"}
                 </td>
-                {stock.fifty_two_week_low && (
-                  <>
-                    <td
-                      style={{
-                        color: stock.stock_change_p > 0 ? "green" : "red",
-                      }}
-                      title={`${stock.stock_symbol} Change%`}
-                    >
-                      {Math.round(stock.stock_change_p * 100) / 100}
-                    </td>
+                <td title={`${stock.symbol} Status`}>{stock.symbol_status || "N/A"}</td>
 
-                    <td title={`${stock.stock_symbol} 52WK High`}>
-                      {Math.round(stock.fifty_two_week_high * 100) / 100}
-                    </td>
-
-                    <td title={`${stock.stock_symbol} 52WK Low`}>
-                      {Math.round(stock.fifty_two_week_low * 100) / 100}
-                    </td>
-                  </>
-                )}
-                <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
-
-                {/* market cap */}
-                {stock.marketcap && (
-                  <td title={`${stock.stock_symbol} Market Cap`}>
-                    {parseFloat(stock.marketcap).toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                    })}
-                  </td>
-                )}
-                {props.tradeType == "open" && (
-                  <td
-                    style={{
-                      color: stock.stock_change > 0 ? "green" : "red",
-                    }}
-                    title={`${stock.stock_symbol} Profit`}
-                  >
-                    50
-                  </td>
-                )}
                 {props.tradeType == "open" && (
                   <td
                     style={{
                       color: stock.type == "Buy" ? "green" : "red",
                     }}
-                    title={`${stock.stock_symbol} Type`}
+                    title={`${stock.symbol} Type`}
                   >
                     {stock.type}
                   </td>
-                )}
-                {props.tradeType == "open" && (
-                  <td title={`${stock.stock_symbol} Time`}>{stock.date}</td>
                 )}
                 <td>
                   <div>
@@ -331,6 +298,7 @@ function DataTable(props) {
           })}
         </tbody>
       </Table>
+
       {show && <div className="modal-overlay" />}
       <Modal show={show} onHide={() => setShow(false)} centered>
         <Modal.Header closeButton>
@@ -343,13 +311,13 @@ function DataTable(props) {
                 <div>
                   <Form.Label>Symbol Name</Form.Label>
                   <h5 className="text-center" style={{ color: "#69df07" }}>
-                    {stockData?.stock_symbol}
+                    {stockData?.symbol}
                   </h5>
                 </div>
                 <div>
-                  <Form.Label>Current Points</Form.Label>
+                  <Form.Label>LDCP</Form.Label>
                   <h5 className="text-center" style={{ color: "red" }}>
-                    {Math.round(stockData?.indexpoints * 100) / 100}
+                    {Math.round(stockData?.symbol_ldcp * 100) / 100}
                   </h5>
                 </div>
                 {props.tradeType === "open" && (

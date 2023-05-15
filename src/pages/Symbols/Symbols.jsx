@@ -6,15 +6,13 @@ const Symbols = () => {
   const [stocks, setStocks] = useState([]);
   const tableHeads = [
     "Symbol",
-    "Points",
-    "Weight",
-    "Cur.",
-    "Chg.",
-    "Chg%.",
-    "52WK High",
-    "52WK Low",
-    "Vol.",
-    "Market Cap(000's)",
+    "Sector",
+    "Title",
+    "Type",
+    "Price",
+    "LDCP",
+    "Deduction",
+    "Status",
     "Trade Option",
   ];
 
@@ -24,9 +22,12 @@ const Symbols = () => {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/stockData`, {
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": import.meta.env.VITE_BACKEND_URL,
+            "ngrok-skip-browser-warning": "any",
           },
+          withCredentials: "false",
         });
+        console.log(response.data.data.length);
         setStocks(response.data.data);
       };
 
@@ -47,7 +48,7 @@ const Symbols = () => {
       style={{ width: "90%", background: "#ffffff", marginTop: "10px" }}
     >
       <div>
-        <DataTable tableHeads={tableHeads} openData={stocks} length={length} tradeType="" />
+        <DataTable tableHeads={tableHeads} openData={stocks} length={stocks.length} tradeType="" />
       </div>
     </div>
   );
