@@ -11,14 +11,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/?id=` + accessId, {
+      const res = await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_URL}/users/?id=` + accessId, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
         },
       });
 
-      const data = await res.data;
+      const data = await res.json();
       // check if user exists
       if (data.length) {
         // store user data in session storage

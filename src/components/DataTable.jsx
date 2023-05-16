@@ -74,13 +74,16 @@ function DataTable(props) {
     });
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/openTrades`,
-        {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/open-trade`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: qs.stringify({
           // id: Math.random() * 10,
           user_id: user.id,
           account_id: user.accessId,
-          name: stockData.stock_title,
           trade_symbol: stockData.symbol,
           trade_type: type,
           trade_comment: description,
@@ -88,14 +91,9 @@ function DataTable(props) {
           trade_price: stockData.symbol_price,
           trade_commission: 0.0,
           // date: new Date().toLocaleString(),
-        },
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
-      );
+        }),
+        mode: "cors",
+      });
       console.log(response.data);
       setShow(false);
     } catch (error) {
@@ -329,13 +327,6 @@ function DataTable(props) {
                   </div>
                 )}
               </div>
-
-              {/* <Form.Control
-                type="text"
-                placeholder="Enter name"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-              /> */}
             </Form.Group>
 
             {props.tradeType !== "open" && (
@@ -348,8 +339,8 @@ function DataTable(props) {
                   onChange={(event) => setType(event.target.value)}
                 >
                   <option value="">Select type</option>
-                  <option value="Buy">Buy</option>
-                  <option value="Sell">Sell</option>
+                  <option value="buy">Buy</option>
+                  <option value="sell">Sell</option>
                 </Form.Control>
               </Form.Group>
             )}
