@@ -14,7 +14,7 @@ function NavBar() {
   return (
     <Navbar expand="lg">
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="/symbols">
           <img
             alt="homePage"
             src="sarmaayaNav.jpg"

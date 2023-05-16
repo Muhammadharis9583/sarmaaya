@@ -80,8 +80,7 @@ function DataTable(props) {
           "Content-Type": "application/x-www-form-urlencoded",
           "Access-Control-Allow-Origin": "*",
         },
-        body: qs.stringify({
-          // id: Math.random() * 10,
+        body: new URLSearchParams({
           user_id: user.id,
           account_id: user.accessId,
           trade_symbol: stockData.symbol,
@@ -90,7 +89,6 @@ function DataTable(props) {
           trade_volume: volume,
           trade_price: stockData.symbol_price,
           trade_commission: 0.0,
-          // date: new Date().toLocaleString(),
         }),
         mode: "cors",
       });
@@ -349,6 +347,7 @@ function DataTable(props) {
               <Form.Label>Volume:</Form.Label>
               <Form.Control
                 type="number"
+                min={0}
                 placeholder="Enter volume"
                 value={volume}
                 onChange={(event) => setVolume(event.target.value)}
