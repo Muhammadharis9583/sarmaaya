@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Table, Modal, Form } from "react-bootstrap";
 import styles from "./DataTable.module.css";
 import axios from "axios";
-import * as qs from "qs";
+import { ToastContainer, toast } from "react-toastify";
 
 function DataTable(props) {
   const [show, setShow] = useState(false);
@@ -98,89 +98,16 @@ function DataTable(props) {
       );
       console.log(response.data);
       setShow(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleCloseTradeSubmit = async (event) => {
-    event.preventDefault();
-
-    // invalid stock volume validation. parseInt is used because volume is a json string
-    if (volume > parseInt(stockData.stock_volume)) {
-      alert("Volume cannot be greater than stock volume");
-      return;
-    }
-    // write to a .json file
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/closedTrades`,
-        {
-          stockId: stockData.id,
-          symbol: stockData.symbol,
-          st_time: stockData.date,
-          start_currnet_price: stockData.stock_current_price,
-          type: stockData.type,
-          indexpoints: stockData.indexpoints,
-          stock_current_price: stockData.stock_current_price,
-          stock_change: stockData.stock_change,
-          stock_volume: volume,
-          description,
-          profit: 120,
-          name: stockData.stock_title,
-          date: new Date().toLocaleString(),
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
-      );
-      console.log(response.data);
-
-      // if stock volume is 0, delete the trade from open trades
-      if (stockData.stock_volume - volume === 0) {
-        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/openTrades/${stockData.id},`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-
-        // delete the stock from the data table
-        setData((prevData) => prevData.filter((stock) => stock.id !== stockData.id));
-      } else {
-        // else update the stock volume in open trades
-        const updatedData = await axios.patch(
-          `${import.meta.env.VITE_BACKEND_URL}/openTrades/${stockData.id}`,
-          {
-            stock_volume: parseInt(stockData.stock_volume) - volume,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          }
-        );
-        console.log(updatedData.data);
-
-        // update the stock volume in the data table
-        setData((prevData) => {
-          const newData = prevData.map((stock) => {
-            if (stock.id === stockData.id) {
-              // create a new object with updated stock volume and return it
-              return { ...stock, stock_volume: parseInt(stock.stock_volume) - volume };
-            }
-            // else return the stock as it is
-            return stock;
-          });
-          // return the new data
-          return newData;
-        });
-      }
-      setShow(false);
+      toast.success("🦄 Wow so easy!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } catch (error) {
       console.error(error);
     }
@@ -191,9 +118,15 @@ function DataTable(props) {
       <div className="d-flex justify-content-between border">
         <div>
           <div className="pt-3 ps-3" id="stock-screener_length">
-            <label className="d-flex gap-2 align-items-center mb-2 text-align-left" htmlFor="">
+            <label
+              className="d-flex gap-2 align-items-center mb-2 text-align-left"
+              htmlFor=""
+            >
               Show
-              <Form.Select className="w-auto d-inline-block" onChange={handleSelectChange}>
+              <Form.Select
+                className="w-auto d-inline-block"
+                onChange={handleSelectChange}
+              >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
                 <option value={50}>50</option>
@@ -238,8 +171,15 @@ function DataTable(props) {
             return (
               <tr key={index} className="fs-6">
                 <td className={styles.symbol}>
-                  <img src="mosque.png" alt="stock image" className="mb-2" width="18px" />
-                  <a href={`https://sarmaaya.pk/psx/company/${stock.symbol}`}>{stock.symbol}</a>
+                  <img
+                    src="mosque.png"
+                    alt="stock image"
+                    className="mb-2"
+                    width="18px"
+                  />
+                  <a href={`https://sarmaaya.pk/psx/company/${stock.symbol}`}>
+                    {stock.symbol}
+                  </a>
                 </td>
                 <td title={`${stock.symbol} Sector`} style={{ width: "200px" }}>
                   {stock.symbol_sector || "N/A"}
@@ -252,14 +192,22 @@ function DataTable(props) {
                 <td title={`${stock.symbol} Title`} style={{ width: "300px" }}>
                   {stock.symbol_title || "N/A"}
                 </td>
-                <td title={`${stock.symbol} Type`}>{stock.symbol_type || "N/A"}</td>
+                <td title={`${stock.symbol} Type`}>
+                  {stock.symbol_type || "N/A"}
+                </td>
 
-                <td title={`${stock.symbol} Price`}>{stock.symbol_price || "N/A"}</td>
-                <td title={`${stock.symbol} LDCP`}>{stock.symbol_ldcp || "N/A"}</td>
+                <td title={`${stock.symbol} Price`}>
+                  {stock.symbol_price || "N/A"}
+                </td>
+                <td title={`${stock.symbol} LDCP`}>
+                  {stock.symbol_ldcp || "N/A"}
+                </td>
                 <td title={`${stock.symbol} Dfault Deduction`}>
                   {stock.default_deduction || "N/A"}
                 </td>
-                <td title={`${stock.symbol} Status`}>{stock.symbol_status || "N/A"}</td>
+                <td title={`${stock.symbol} Status`}>
+                  {stock.symbol_status || "N/A"}
+                </td>
 
                 {props.tradeType == "open" && (
                   <td
@@ -380,12 +328,28 @@ function DataTable(props) {
           </Button>
           <Button
             variant="primary"
-            onClick={props.tradeType !== "open" ? handleOpenTradeSubmit : handleCloseTradeSubmit}
+            onClick={
+              props.tradeType !== "open"
+                ? handleOpenTradeSubmit
+                : handleCloseTradeSubmit
+            }
           >
             Submit
           </Button>
         </Modal.Footer>
       </Modal>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 }
