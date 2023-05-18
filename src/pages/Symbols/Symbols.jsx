@@ -19,16 +19,17 @@ const Symbols = () => {
   useEffect(() => {
     try {
       const fetchData = async () => {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/stockData`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/symbol`, {
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": import.meta.env.VITE_BACKEND_URL,
+            "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "any",
           },
-          withCredentials: "false",
+          mode: "cors",
         });
-        console.log(response.data.data.length);
-        setStocks(response.data.data);
+        const data = await response.json();
+        console.log(data);
+        setStocks(data.data);
       };
 
       fetchData();
@@ -41,7 +42,7 @@ const Symbols = () => {
       setStocks([]);
     };
   }, []);
-  if (!stocks) return <div>Loading...</div>;
+  if (!stocks.length) return <div>Loading...</div>;
   return (
     <div
       className="rounded-3 w-90 mx-auto min-vh-100"
