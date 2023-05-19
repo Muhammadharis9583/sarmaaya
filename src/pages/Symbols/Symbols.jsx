@@ -19,14 +19,17 @@ const Symbols = () => {
   useEffect(() => {
     try {
       const fetchData = async () => {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/symbol`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "any",
-          },
-          mode: "cors",
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/stockData`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "any",
+            },
+            mode: "cors",
+          }
+        );
         const data = await response.json();
         console.log(data);
         setStocks(data.data);

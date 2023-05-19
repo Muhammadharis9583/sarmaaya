@@ -13,17 +13,21 @@ function History() {
     "Volume",
     "End Time",
     "End Price",
+    "Commission",
     "Profit",
   ];
   useEffect(() => {
     try {
       const fetchData = async () => {
-        const response_close = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/closedTrades`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
+        const response_close = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/trades-history`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        );
         setCloseData(response_close.data);
       };
 

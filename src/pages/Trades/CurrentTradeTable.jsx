@@ -92,6 +92,16 @@ function CurrentTradeTable(props) {
         );
         console.log(response.data);
         setShow(false);
+        toast.error("Trade closed successfully!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       } catch (error) {
         console.error(error);
       }
@@ -396,6 +406,18 @@ function CurrentTradeTable(props) {
           theme="dark"
         />
       </>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }

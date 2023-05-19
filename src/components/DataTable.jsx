@@ -94,7 +94,7 @@ function DataTable(props) {
       });
       console.log(response.data);
       setShow(false);
-      toast.success("🦄 Wow so easy!", {
+      toast.success("Trade opend successfully!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -318,11 +318,7 @@ function DataTable(props) {
           </Button>
           <Button
             variant="primary"
-            onClick={
-              props.tradeType !== "open"
-                ? handleOpenTradeSubmit
-                : handleCloseTradeSubmit
-            }
+            onClick={ handleOpenTradeSubmit}
           >
             Submit
           </Button>

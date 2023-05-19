@@ -83,30 +83,43 @@ function HistoryTable(props) {
           {close.map((stock, index) => {
             return (
               <>
-                <tr key={index} className="fs-6" onClick={() => toggleExpansion(index)}>
-                  <td className={styles.stock_symbol}>{stock.id}</td>
-                  <td title={`${stock.stock_symbol} Start Time`}>{stock.st_time}</td>
+                <tr
+                  key={index}
+                  className="fs-6"
+                  onClick={() => toggleExpansion(index)}
+                >
+                  <td className={styles.stock_symbol}>{stock.trade_id}</td>
+                  <td title={`${stock.stock_symbol} Start Time`}>
+                    {stock.trade_timestamp}
+                  </td>
                   <td
                     style={{
-                      color: stock.type == "Buy" ? "green" : "red",
+                      color: stock.trade_type == "buy" ? "green" : "red",
                     }}
                     title={`${stock.stock_symbol} Type`}
                   >
-                    {stock.type}
+                    {stock.trade_type}
                   </td>
-                  <td className={styles.stock_symbol}>{stock.stock_symbol}</td>
+                  <td className={styles.stock_symbol}>{stock.symbol}</td>
                   <td title={`${stock.stock_symbol} Start Price`}>
-                    {Math.round(stock.start_currnet_price * 100) / 100}
+                    {stock.trade_price}
                   </td>
-                  <td title={`${stock.stock_symbol} Volume`}>{stock.stock_volume}</td>
-                  <td title={`${stock.stock_symbol} End Time`}>{stock.date}</td>
+                  <td title={`${stock.stock_symbol} Volume`}>
+                    {stock.close_volume}
+                  </td>
+                  <td title={`${stock.stock_symbol} End Time`}>
+                    {stock.create_timestamp}
+                  </td>
                   <td title={`${stock.stock_symbol} End Price`}>
-                    {Math.round(stock.stock_current_price * 100) / 100}
+                    {stock.close_price}
+                  </td>
+                  <td title={`${stock.stock_symbol} End Price`}>
+                    {stock.close_commission}
                   </td>
                   {/* market cap */}
                   <td
                     style={{
-                      color: stock.stock_change > 0 ? "green" : "red",
+                      color: stock.close_price > 0 ? "green" : "red",
                     }}
                     title={`${stock.stock_symbol} Profit`}
                   >
@@ -123,7 +136,7 @@ function HistoryTable(props) {
                         <p className="bg-secondary rounded-2 text-center p-1 text-white">
                           Description
                         </p>{" "}
-                        <p className="m-2">{stock.description}</p>
+                        <p className="m-2">{stock.close_desc}</p>
                       </span>
                     </td>
                   </tr>
